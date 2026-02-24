@@ -36,6 +36,8 @@ theme: gaia
 - An **Editor Utility Widget** provides a user-friendly form for defining *card properties*.
 - The form includes **standard properties** (e.g., *Name, Cost, Rarity*) required for every card.
 
+![bg right:40%](image.png)
+
 ---
 
 # **Further Development**
