@@ -1,0 +1,59 @@
+Using your earlier tool ideation exercise, select one tool.
+
+You will now evaluate it from a networking, security, and compliance perspective.
+
+Identify potential risks:
+
+- Could the tool transmit data over a network?
+
+- Could it expose sensitive project or player data?
+
+- Could it be exploited or manipulated?
+
+- What happens if it is compromised?
+
+Consider:
+
+- Internal team misuse
+
+- External attackers
+
+- Misconfiguration
+
+- Data leakage
+
+
+For each identified threat, propose mitigation:
+
+- Protocol choice (TCP / UDP / HTTPS?)
+
+- Encryption required?
+
+- Authentication method?
+
+- Access control?
+
+- Logging and auditing?
+
+- Data minimisation (GDPR principle)
+
+Be specific about technical measures.
+
+
+If your tool currently operates locally:
+
+- How could networking improve it?
+
+ - Centralised validation?
+
+ - Shared dashboards?
+
+ - Version control integration?
+
+ - Containerised deployment?
+
+- Would a client–server model improve trust?
+
+- Would a dedicated authoritative service reduce risk?
+
+Explain whether networking adds value or unnecessary complexity.

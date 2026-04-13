@@ -1,0 +1,37 @@
+Design a public-facing API for one tool/service/feature you have built (choose one you’ve actually implemented), such as:
+
+- an Unreal plugin feature
+
+- a set of Blueprint nodes
+
+- an external RESTful web service
+
+- a developer tool (pipeline/tooling utility)
+
+
+Your Output
+
+- API surface (choose one, or combine if relevant):
+
+    - Blueprint node API (node names + inputs/outputs), and/or
+
+    - REST API (endpoints/URLs)
+
+- Usage examples:
+
+    - For Blueprint: 1 example “call flow” (node chain description or small diagram)
+
+    - For REST: HTTP verbs + minimal JSON request/response
+
+
+API Reference
+
+- API reference-style documentation:
+
+    - what each call/node does (1–2 lines)
+
+    - parameters (name, type, required/optional)
+
+    - return data / outputs (type + meaning)
+
+    - errors / failure cases (e.g., invalid input, timeout, permission)
