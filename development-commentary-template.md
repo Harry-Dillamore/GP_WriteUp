@@ -18,21 +18,21 @@
 
 ---
 
-## Abstract *(Approx. 5–10% of word count)*
+## Abstract _(Approx. 5–10% of word count)_
 
 Summarise your task, goals, approach, and final outcome. What was the intent of your work? What is the most important thing to know before reading on?
 
 ---
 
-## Research *(Approx. 20-30% of word count)*
+## Research _(Approx. 20-30% of word count)_
 
 ### What sources or references have you identified as relevant to this task?
 
 Reflect on the **type** and **relevance** of sources explored. Justify your research direction in relation to the task brief and target outcomes.
 
-* What types of sources did you explore and why?
-* Which types of sources did you avoid and why?
-* How does the research relate to the user experience, technical approach, or creative aim?
+- What types of sources did you explore and why?
+- Which types of sources did you avoid and why?
+- How does the research relate to the user experience, technical approach, or creative aim?
 
 #### Sources
 
@@ -48,36 +48,36 @@ You may include both **academic resources** and **industry examples** (e.g. docu
 
 ---
 
-## Implementation *(Approx. 30–40% of word count)*
+## Implementation _(Approx. 30–40% of word count)_
 
 ### What was your development process and how did decisions evolve?
 
 Describe your technical and creative approach, including:
 
-* Planning, ideation, and iteration
-* Feedback received and how it was integrated
-* New tools, workflows, or systems explored
+- Planning, ideation, and iteration
+- Feedback received and how it was integrated
+- New tools, workflows, or systems explored
 
 #### Example Code Snippet
 
 ```csharp
 using UnityEngine;
 
-public class HelloWorld : MonoBehaviour 
+public class HelloWorld : MonoBehaviour
 {
-    public void Start() 
+    public void Start()
     {
         Debug.Log("Hello World!");
     }
 }
 ```
 
-*Figure 2: Example code snippet using Unity's `Start()` method.*
+_Figure 2: Example code snippet using Unity's `Start()` method._
 
 #### Example Image
 
 ![Example](https://beforesandafters.com/wp-content/uploads/2021/05/Welcome-to-Unreal-Engine-5-Early-Access-11-16-screenshot.png)
-*Figure 3: Unreal packaging menu interface.*
+_Figure 3: Unreal packaging menu interface._
 
 ### What creative or technical methods did you try?
 
@@ -89,14 +89,14 @@ How did you address problems, bugs, or limitations?
 
 ---
 
-## Testing *(Approx. 10–15% of word count)*
+## Testing _(Approx. 10–15% of word count)_
 
 ### What testing methods did you use?
 
-* Did you conduct internal testing, peer testing, or user testing?
-* What were your key goals in testing?
-* What did you observe or learn from testing?
-* How did testing influence the final result?
+- Did you conduct internal testing, peer testing, or user testing?
+- What were your key goals in testing?
+- What did you observe or learn from testing?
+- How did testing influence the final result?
 
 You may include screenshots, graphs, tables, or embedded videos to demonstrate tests and results.
 
@@ -108,21 +108,21 @@ You may include screenshots, graphs, tables, or embedded videos to demonstrate t
 | User D | Chrome   | M1 MacBook Air         | Guided Test    | 1          | 62       | 2              | Yes                  | “Tutorial is clear. Suggested adding a visual checkpoint marker.”      |
 | User E | Safari   | iPhone 12 Safari       | Blind Test     | 4          | 50       | 2, 3, 3, 4     | Partial              | “Enjoyed art style. Unclear level goals; needed more on-screen hints.” |
 
-*Figure 4: User Testing Data.*
+_Figure 4: User Testing Data._
 
 ---
 
-## Critical Reflection *(Approx. 10–15% of word count)*
+## Critical Reflection _(Approx. 10–15% of word count)_
 
 ### What went well?
 
-* What strengths or successes stood out in the final piece?
-* Did anything exceed expectations?
+- What strengths or successes stood out in the final piece?
+- Did anything exceed expectations?
 
 ### What could be improved or done differently next time?
 
-* Were there things that didn’t work? Why?
-* What would you try differently with more time or resources?
+- Were there things that didn’t work? Why?
+- What would you try differently with more time or resources?
 
 ---
 
@@ -132,7 +132,7 @@ Please use [UCA's Harvard Referencing Format](https://mylibrary.uca.ac.uk/refere
 
 Example:
 
-> Rollings, A. and Adams, E. (2003) *Andrew Rollings and Ernest Adams on Game Design*. New Riders Publishing.
+> Rollings, A. and Adams, E. (2003) _Andrew Rollings and Ernest Adams on Game Design_. New Riders Publishing.
 
 ---
 
@@ -140,9 +140,9 @@ Example:
 
 You must declare any content that was **not entirely created by you**, or was **modified with the aid of AI tools**. This includes:
 
-* Third-party 3D models, audio, textures, or code
-* Code snippets from tutorials or forums
-* AI-generated or AI-assisted assets (e.g. ChatGPT, GitHub Copilot, DALL·E)
+- Third-party 3D models, audio, textures, or code
+- Code snippets from tutorials or forums
+- AI-generated or AI-assisted assets (e.g. ChatGPT, GitHub Copilot, DALL·E)
 
 List these clearly, with context where needed.
 
@@ -150,16 +150,16 @@ Example:
 
 > The following assets were created or modified with the use of GPT-4o:
 >
-> * `Test.cs` – generated structure with manual revision
-> * `UIAudioManager.cs` – refactored with Copilot suggestions
-> * `DevelopmentJournal.html` – generated layout and headings
+> - `Test.cs` – generated structure with manual revision
+> - `UIAudioManager.cs` – refactored with Copilot suggestions
+> - `DevelopmentJournal.html` – generated layout and headings
 
 ---
 
 ## Tips for Success
 
-* Use plenty of **images, code snippets, drawn diagrams, tables and embedded media** to support your writing.
-* Use **inline citations** for everything that influenced your work, including software and games. Include as many **hyperlinks** as possible for easier navigation to external sources.
-* Reference **documentation, tutorials**, and **games** just like academic sources.
-* Word count is a guideline – ±10% is allowed.
-* You are allowed to use AI tools, but you **must declare** them under *Declared Assets*.
+- Use plenty of **images, code snippets, drawn diagrams, tables and embedded media** to support your writing.
+- Use **inline citations** for everything that influenced your work, including software and games. Include as many **hyperlinks** as possible for easier navigation to external sources.
+- Reference **documentation, tutorials**, and **games** just like academic sources.
+- Word count is a guideline – ±10% is allowed.
+- You are allowed to use AI tools, but you **must declare** them under _Declared Assets_.

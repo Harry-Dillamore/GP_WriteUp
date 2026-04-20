@@ -1,0 +1,208 @@
+Assessment Rubric and Learning Outcome Mapping
+Assessment Rubric and Learning Outcome Mapping
+
+
+Learning Outcome
+	
+
+Summary
+
+LO1
+	
+
+Critical, contextual and academic understanding of practice, supported by research and analysis
+
+LO2
+	
+
+Understanding and application of tools and programming using industry-standard software
+
+LO3
+	
+
+Application of technical and professional skills within a collaborative production context
+
+
+Professionalism (20%)
+
+Primary LO Mapping: LO3
+
+Secondary Mapping: LO2
+
+Grade Band
+	
+
+Descriptor
+
+0–24 Inadequate
+	
+
+Work is poorly presented or incomplete. Little to no evidence of industry-standard workflows. Disorganised project structure, inconsistent naming conventions, unreadable or missing documentation.
+
+25–39 Weak
+	
+
+Basic attempt at professional presentation but with frequent issues. Limited use of industry-standard workflows. Documentation lacks clarity, structure, or consistency.
+
+40–59 Satisfactory
+	
+
+Work is presented clearly with generally appropriate workflows. Project structure and naming conventions are mostly consistent. Documentation is readable but descriptive rather than reflective.
+
+60–69 Strong
+	
+
+Clear and well-structured presentation following industry-standard workflows. Good project organisation, consistent naming, and clear documentation that supports the development process.
+
+70–79 Excellent
+	
+
+Highly professional presentation. Strong adherence to industry conventions and workflows. Documentation is clear, structured, and supports decision-making and production processes.
+
+80+ Professional Quality
+	
+
+Industry-ready standard. Exemplary project organisation, naming, workflow, and documentation quality. Reflects professional studio practice and could be handed to another developer with minimal onboarding.
+
+Learning Outcome Alignment
+
+    LO3: Demonstrates professional practice, responsibility, and production standards
+    LO2: Uses appropriate tools and workflows expected in industry contexts
+
+Research (30%)
+
+Primary LO Mapping: LO1
+
+Secondary Mapping: LO3
+
+Grade Band
+	
+
+Descriptor
+
+0–24 Inadequate
+	
+
+Little or no research evident. Sources are missing, inappropriate, or unreferenced. No meaningful analysis or application to the work.
+
+25–39 Weak
+	
+
+Limited research using a small range of sources. Minimal critical analysis. Research is largely descriptive and weakly connected to the outcome.
+
+40–59 Satisfactory
+	
+
+Adequate range of credible sources. Research is referenced correctly and used to inform decisions, though analysis may be surface-level or inconsistent.
+
+60–69 Strong
+	
+
+Good quality and variety of academic, industry, and practice-based sources. Clear analysis and justification of decisions. Evidence of research-informed iteration.
+
+70–79 Excellent
+	
+
+Strong critical engagement with research. Excellent integration of theory, industry examples, and practice. Clear evidence of data collection, analysis, and implementation.
+
+80+ Professional Quality
+	
+
+Outstanding research depth and critical analysis. Academic conventions are applied rigorously. Research drives innovation, decision-making, and evaluation at a professional level.
+
+Learning Outcome Alignment
+
+    LO1: Critical and contextual understanding supported by academic research
+    LO3: Evidence-based decision-making within a development process
+
+Creativity (20%)
+
+Primary LO Mapping: LO1
+
+Secondary Mapping: LO2
+
+Grade Band
+	
+
+Descriptor
+
+0–24 Inadequate
+	
+
+Work shows no originality. Heavily derivative or copied solutions with no adaptation or reflection.
+
+25–39 Weak
+	
+
+Limited creative engagement. Solutions rely heavily on existing examples with minimal experimentation or innovation.
+
+40–59 Satisfactory
+	
+
+Some original ideas and problem-solving approaches. Combines existing methods with minor adaptations to meet requirements.
+
+60–69 Strong
+	
+
+Clear evidence of creative thinking and problem-solving. Research-informed experimentation and thoughtful combination of ideas.
+
+70–79 Excellent
+	
+
+Highly original and well-considered creative solutions. Demonstrates confidence in experimentation, iteration, and design decision-making.
+
+80+ Professional Quality
+	
+
+Exceptional creativity comparable to industry or independent professional work. Innovative methodologies and advanced ideas are fully realised and justified.
+
+Learning Outcome Alignment
+
+    LO1: Critical application of ideas and contextual understanding
+    LO2: Creative use of tools and technical approaches
+
+Technical (30%)
+
+Primary LO Mapping: LO2
+
+Secondary Mapping: LO3
+
+Grade Band
+	
+
+Descriptor
+
+0–24 Inadequate
+	
+
+Work is technically incomplete or non-functional. Major bugs prevent core functionality. Poor execution or failure to produce a viable build.
+
+25–39 Weak
+	
+
+Basic functionality present but with frequent bugs or technical issues. Limited understanding of tools or programming concepts.
+
+40–59 Satisfactory
+	
+
+Functional outcome with manageable issues. Demonstrates a basic understanding of tools and programming, though implementation may lack polish or optimisation.
+
+60–69 Strong
+	
+
+Solid technical execution with minimal issues. Good understanding and application of tools, programming concepts, and debugging processes.
+
+70–79 Excellent
+	
+
+High-quality, stable implementation. Well-structured, efficient, and robust code or systems. Evidence of thorough testing and optimisation.
+
+80+ Professional Quality
+	
+
+Industry-ready technical execution. Clean, maintainable, and scalable implementation with rigorous testing and professional build quality.
+
+Learning Outcome Alignment
+
+    LO2: Competent and confident use of industry-standard tools and programming
+    LO3: Technical contribution to shared outcomes and production quality
