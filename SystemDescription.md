@@ -110,3 +110,56 @@ graph TD
     CheckCards -- False --> PrepInput[Set inputValue = false <br/> Update UI]
     PrepInput --> Prompt2[Print: 'write a value...']
 ```
+
+## calculate score
+
+This section manages the logic for determining the exact numerical value of the cards a player has chosen to play, as well as safely removing them from their hand:
+
+**1. Initialization**
+When `CalculateScore` is called, it receives `_chosenCards` (an array of integer indices the player selected), the player's `_hand` object, and the `_owner`. It immediately clears a temporary local array called `removeFromHand` to prepare for processing.
+
+**2. Card Evaluation & Multipliers (First Loop)**
+The system runs a `For Each Loop` over the `_chosenCards` array. For every selected index:
+- It retrieves the precise card ID from the player's `hand` array.
+- It adds this card ID into the `removeFromHand` array.
+- It converts the card ID into a string and retrieves its baseline data from the `DT_Deck` **Data Table** to extract its `Card Value`.
+- It then evaluates the selected cards for pairs or triples. 
+  - Unique cards are worth 1x.
+  - Pairs double the worth of the matching cards (2x).
+  - Triples triple the worth of all cards (3x).
+- After determining the correct multiplier, the card's value is multiplied by 1,000 to reach its final score.
+- It performs an Add operation, accumulating this value into the total `_score`.
+
+**3. Card Safing & Removal (Second Loop)**
+After the first loop completes, a second `For Each Loop` iterates over the `removeFromHand` array. It uses the `Array_RemoveItem` node to delete these newly played cards from the active player's `hand`. Separating the scoring and removal into two distinct loops prevents the index-shifting bugs that occur when removing elements from an array while still iterating over its original indices.
+
+**4. Return Result**
+Finally, once all selected cards are evaluated and cleanly removed from the hand, the final calculated `_score` is returned to the main game loop so the player can declare their value ahead of the Audit Phase.
+
+```mermaid
+graph TD
+    Start([CalculateScore]) --> Setup[Initialize Local Variables & <br/> Clear removeFromHand]
+    Setup --> Loop1[For Each Loop: _chosenCards]
+
+    Loop1 -- Loop Body --> GetCard[Get Card ID from hand using index]
+    GetCard --> AddToRemove[Add Card ID to removeFromHand]
+    AddToRemove --> Lookup[Lookup Face Value in DT_Deck]
+    
+    Lookup --> CheckMultipliers{Check for Pairs/Triples}
+    CheckMultipliers -- "Triple (3 of a kind)" --> Mult3[Face Value * 3]
+    CheckMultipliers -- "Pair (2 of a kind)" --> Mult2[Face Value * 2]
+    CheckMultipliers -- "Unique" --> Mult1[Face Value * 1]
+    
+    Mult3 --> Apply1000[Value * 1000]
+    Mult2 --> Apply1000
+    Mult1 --> Apply1000
+
+    Apply1000 --> AddScore[_score += Final Value]
+    AddScore --> Loop1
+
+    Loop1 -- Completed --> Loop2[For Each Loop: removeFromHand]
+
+    Loop2 -- Loop Body --> RemoveCard[RemoveItem: Card ID from hand]
+
+    Loop2 -- Completed --> Return([Return _score])
+```

@@ -158,6 +158,120 @@ graph TD
 - I chose to spend time making the AI opponents because we had discussed that the multiplayer implementation was going to take a long time as it was a new system for the team to learn.
 - This meant that we would be unable to test any of the features of the game until the multiplayer was implemented.
 
+### Dealer Actor Logic
+
+**Dealer Actor Overview**
+This is the actor which is responsible for dealing cards to the players and handling the majority of the game logic. I chose to put the logic in a single authoritative actor to make it easier to manage and debug the game logic.
+
+- The logic is split up into many custom events to make it easy to trigger different parts of the game loop.
+- I attempted to migrate the logic to components to make it easier to involve more people working simultaneously; however, this was not successful because I could not get people to consistently work like this. Since not enough people were actively working on the logic of the game, it was not worth the time investment.
+
+```mermaid
+graph TD
+    SystemStart["Begin Play / Initialize"] --> Setup["Setup Deck and Narrator"]
+    Setup --> StartDeal["Deal 5 Cards to Players"]
+    StartDeal --> TurnStart["Evaluate Turn Count"]
+
+    TurnStart --> ShopCheck{"Is it a Shop Turn?"}
+    ShopCheck -->|Yes| ShopPhase["Shop Phase"]
+    ShopPhase --> NextTurn["Next Player / Increment Turn"]
+
+    ShopCheck -->|No| PlayerTurn["Regular Turn"]
+    PlayerTurn --> SelectCards["Poll Input: Player selects 3 cards"]
+    SelectCards --> DeclareValue["Player declares a value"]
+    DeclareValue --> AuditPhase{"Audit Phase"}
+
+    AuditPhase -->|Audited| AuditLogic{"Did the player lie?"}
+    AuditPhase -->|Not Audited| ApplyValues["Apply Declared Score"]
+
+    AuditLogic -->|Yes - Auditor Wins| PlayerLosedVal["Current player loses declared value"]
+    AuditLogic -->|No - Player Wins| AuditorLosedVal["Auditor loses declared value"]
+
+    PlayerLosedVal --> Score["Update Scores"]
+    AuditorLosedVal --> Score
+    ApplyValues --> Score
+
+    Score --> CheckState{"Check Win/Loss Conditions"}
+    CheckState -->|Game Continues| NextTurn
+    CheckState -->|Game Over| EndGame["End Game"]
+
+    NextTurn --> TurnStart
+```
+
+#### Start Game
+
+![start game blueprints](start_game_blueprints.png)
+
+This section manages the setup of the game, taking place across three main execution paths:
+
+**1. Initialization (BeginPlay)**
+On `BeginPlay`, the Dealer triggers `GetNarratorBPReference`. This searches the level using `GetAllActorsOfClass` to find the `BP_NarratorManager` and caches a reference to it in `NarratorManagerRef` so it can be easily accessed throughout the game without performance overhead.
+
+**2. Game Reset (StartGame)**
+The `StartGame` custom event is executed to initialize a session. It strictly calls `ResetActiveIndex`, which readies a fresh Card Pool for the game.
+
+**3. Dealing Phase (StartingDeal)**
+The `StartingDeal` event handles dispensing the initial hands to all players. It runs a `For Loop` five times (indices 0 to 4). During each of the 5 iterations, a nested `For Each Loop` iterates through the `hands` array (containing all active player hands) and executes `DealCard` to give every player one card at a time. Once the outer loop finishes dealing 5 cards to everyone, it fires the `Turn` function to officially begin gameplay.
+
+```mermaid
+graph TD
+    subgraph Initialization
+    BP([Event Begin Play]) --> CallGetNar[Call GetNarratorBPReference]
+    EventGetNar([Event GetNarratorBPReference]) --> GetAll[Get All Actors of Class: BP_NarratorManager]
+    GetAll --> SetRef[Set NarratorManagerRef]
+    end
+
+    subgraph Prepare Deck
+    StartG([Event StartGame]) --> Reset[ResetActiveIndex <br/> 'Resets CardPool']
+    end
+
+    subgraph Dealing Cards
+    Deal([Event StartingDeal]) --> ForLoop[For Loop <br/> First:0, Last:4]
+    ForLoop -- Loop Body --> ForEach[For Each Loop <br/> Array: hands]
+    ForEach -- Loop Body --> DealCard[DealCard]
+    ForLoop -- Completed --> Turn[Call Turn]
+    end
+```
+
+#### Turn
+
+![turn blueprints](turn_blueprints.png)
+
+This section manages the individual player progression and handles the input polling at the start of a turn:
+
+**1. Turn & Shop Tracking**
+When the `Turn` event fires, the server (via a `Switch Has Authority` check) increments the `TotalTurnCount`. It uses a modulo operation (`TotalTurnCount % 4 == 0`) to determine if it is time for a Shop Phase or a Regular Turn. (As per the design, a shop phase occurs periodically).
+
+**2. Turn Initialization**
+If it is a Regular Turn, the system sets up the state by resetting the `realScore` to 0. It determines the active player by grabbing the current hand, casting it to the character (`BP_FirstPersonCharacter_HarryTesting`), and caching this as the `player` variable.
+
+**3. Input Polling**
+With the player referenced, it prints "select 3 cards" to the screen. It then enters an input polling loop using a 0.2-second `Delay` to repeatedly check if the length of the `player.chosenCards` array is less than 3.
+
+**4. Value Declaration Prep**
+Once the player has selected 3 cards, the loop breaks. The sequence moves to prepare for the value declaration: it resets the player's input state (`inputValue = false`), toggles some UI element visibility (`SetVisibility`), and prompts the player to "write a value or type 0 to tell the truth" on the screen.
+
+```mermaid
+graph TD
+    Turn([Event Turn]) --> Auth{Switch Has Authority}
+    Auth -- Authority --> Inc[Increment TotalTurnCount]
+    Inc --> ModCheck{TotalTurnCount % 4 == 0?}
+
+    ModCheck -- Yes --> Shop[CloseShop / Trigger Shop Phase]
+    ModCheck -- No --> ResetScore[Set realScore = 0]
+
+    ResetScore --> GetPlayer[Get Current Player Hand <br/> Cast to Player Character]
+    GetPlayer --> Cache[Set 'player' reference]
+    Cache --> Prompt1[Print: 'select 3 cards']
+
+    Prompt1 --> CheckCards{chosenCards.Length < 3?}
+    CheckCards -- True --> Delay[Delay 0.2s]
+    Delay --> CheckCards
+
+    CheckCards -- False --> PrepInput[Set inputValue = false <br/> Update UI]
+    PrepInput --> Prompt2[Print: 'write a value...']
+```
+
 ### Auditing
 
 I created a simple auditing system that would allow players to audit each other's declarations.
@@ -222,6 +336,75 @@ flowchart TD
     CheckPlayers -- "No" --> NoAudit([End Audit Phase: No one audited])
 ```
 
+### Card Setup
+
+- the cards are stored in a data table which contains the index, the value, the suit and the image path
+- the data table is static and does not change throughout gameplay
+- an array stores the index of cards that are currently in play and when the data is needed it is fetched from the data table
+- this means that the data is never modified in ways it shouldnt be
+- also simplifies the process of getting cards as there is just one array of integers that has to be handled rather than multiple arrays of different data types
+- below is the data table for the cards:
+
+![card data table](image-6.png)
+
+### Score Calculation
+
+- the score is calculated based on the cards that are played
+- the cards are worth 1000x their face value
+- duplicates double the worth of both cards
+- sets of three are worth 3x the value of the cards
+- the game calculates the score so that it can check if players are telling the truth or not
+- the calculation has to take into account the multiplier for duplicates and sets of three
+
+![play cards function](image-7.png)
+
+```mermaid
+graph TD
+    Start([CalculateScore]) --> Setup[Initialize Local Variables & <br/> Clear removeFromHand]
+    Setup --> Loop1[For Each Loop: _chosenCards]
+
+    Loop1 -- Loop Body --> GetCard[Get Card ID from hand using index]
+    GetCard --> AddToRemove[Add Card ID to removeFromHand]
+    AddToRemove --> Lookup[Lookup Face Value in DT_Deck]
+
+    Lookup --> CheckMultipliers{Check for Pairs/Triples}
+    CheckMultipliers -- "Triple (3 of a kind)" --> Mult3[Face Value * 3]
+    CheckMultipliers -- "Pair (2 of a kind)" --> Mult2[Face Value * 2]
+    CheckMultipliers -- "Unique" --> Mult1[Face Value * 1]
+
+    Mult3 --> Apply1000[Value * 1000]
+    Mult2 --> Apply1000
+    Mult1 --> Apply1000
+
+    Apply1000 --> AddScore[_score += Final Value]
+    AddScore --> Loop1
+
+    Loop1 -- Completed --> Loop2[For Each Loop: removeFromHand]
+
+    Loop2 -- Loop Body --> RemoveCard[RemoveItem: Card ID from hand]
+
+    Loop2 -- Completed --> Return([Return _score])
+```
+
+### Multiplayer
+
+- Multiplayer implementation is something I have not done in any capacity before this project.
+- Me, Bradley, and Josie had to do a lot of research into how to implement multiplayer in Unreal Engine.
+- We used paired / group programming to work on this aspect of the project. This is a well-documented technique often used in software engineering to help teams work together more effectively, and we benefited from bouncing ideas off each other when we got stuck.
+- The task still took us a long time and involved moving many things from running on the client to running on the server.
+- **Server Authority:** Critical logic, such as incrementing the `TotalTurnCount` or handling turn transitions, relies on `Switch Has Authority` checks. This guarantees that only the server handles the game state transitions, which prevents malicious clients from manipulating the turn order.
+- **Remote Procedure Calls (RPCs):** The Dealer actor takes advantage of distinct custom events acting as network boundaries:
+  - `ServerIsAuditing`: A Run-On-Server RPC utilized during the auditing phase. This event allows a connected client to securely transmit their individual audit decision to the authoritative server, passing their `PlayerIndex` and an `Auditing` boolean.
+  - `UpdateAllScores`: A Multicast/Server-driven RPC that ensures once the server finalizes an audit or score check, the correct score array is pushed to all remote clients, keeping UI data perfectly synchronized across all players.
+
+### Card Creator
+
+- The card creator is a tool that was created to help designers create cards for the game.
+- it is a widget that allows designers to enter data for a card and then save it, which creates a data asset and an empty blueprint for the card logic to be put into
+- a referance to the asset is then put into an array containing all of the shop cards
+- I have used a blueprint interface to create a system where the same event can be called for each card, but the logic can be different for each card
+- this means that any card can be called from the central array and the logic will all be called in the same way
+
 ---
 
 ## Testing _(Approx. 10–15% | ~200–300 words)_
@@ -237,6 +420,10 @@ flowchart TD
 ### What went well?
 
 [Reflect on successes: Which aspects of the Card Creator and the gameplay loop are you most proud of? Did it successfully fix the pipeline bottlenecks?]
+
+- **Card Creator Success**: Successfully mitigated pipeline bottlenecks by allowing designers to create abilities via the Editor Utility Widget without touching code, eliminating Git merge conflicts by cleanly separating design variables into Data Assets.
+- **Multiplayer Milestone**: Establishing a stable server-authoritative frame for an entirely new discipline was a major win. Utilizing group/pair programming helped us overcome replication hurdles and effectively secure our RPCs.
+- **Rapid Prototyping**: Developing the basic procedural AI allowed us to bypass the multiplayer delays and immediately test the "bluffing" game theory mechanics to validate the fun factor.
 
 ### What could be improved or done differently next time?
 
