@@ -20,7 +20,7 @@
 
 ## Abstract _(Approx. 5–10% | ~100–200 words)_
 
-[Summarise your task, goals, approach, and final outcome. What was the intent of your work? What is the most important thing to know before reading on? e.g. Core systems loop, Card Creator tool, Git management.]
+This commentary documents my contributions as a developer on _Greedy Piggies_, a multiplayer card game developed in Unreal Engine 5 as part of a group project, with the goal of a commercial release on Steam. The game is a bluffing and betting card game for 2–4 players, in which each player places cards face-down, declares a score value, and then faces the risk of being audited by their opponents. If an auditor successfully catches a bluff, the active player loses their declared value; if the challenge fails, the auditor pays the penalty instead. Players also periodically visit a shop to purchase special ability cards, adding a strategic layer to the core loop. My primary responsibilities spanned the full backend of the game: designing and implementing this core gameplay loop, developing the turn and audit systems, integrating Steam-based multiplayer networking, and building a bespoke **Card Creator** tool to support the design pipeline. The Card Creator, implemented as an Editor Utility Widget, was specifically intended to reduce production bottlenecks by allowing designers to create and register special ability cards independently, without requiring direct programmer involvement. Underpinning all systems is a data-driven architecture using Unreal's Data Tables and Data Assets, which ensured clean version control and prevented merge conflicts as the team scaled. Whilst the final game did not reach the level of polish originally intended, the core systems—including the gameplay loop, data architecture, and multiplayer integration—functioned as designed and represent the primary focus of this write-up.
 
 ![RACI Chart](raci_chart.png)
 
@@ -73,20 +73,6 @@ This is the official technical standard provided by the creators of Unreal Engin
 - **Tooling:** This provided the API references needed to build the **Card Creator** tool using Editor Utility Widgets.
 
 **Evaluation:** This is my most vital source. It architecturally proves that my "Card Creator" is an industry-standard optimization that ensures project stability as the team grows.
-
----
-
-### Bibliography
-
-Curve Animation (2024) _Liar's Bar_. [Video game]. PC: Curve Animation.
-
-Epic Games (2026) _Data-Driven Gameplay Elements_. Available at: https://dev.epicgames.com/documentation/en-us/unreal-engine/data-driven-gameplay-in-unreal-engine (Accessed: 19 April 2026).
-
-Li, S., Zhao, Y. and Wang, X. (2024) ‘Analysis of Bluffing by DQN and CFR in Leduc Hold’em Poker’, _arXiv_, 2401.08522v1 [cs.GT]. Available at: https://arxiv.org/abs/2401.08522 (Accessed: 19 April 2026).
-
-#### Sources
-
-[For each source (at least 1 game, 1 documentation, 1 academic), provide an opening paragraph, a bullet list of what you learned, and a closing paragraph evaluating it.]
 
 ---
 
@@ -383,15 +369,27 @@ With this tool, a designer inputs statistical specifications explicitly on a for
 
 [Reflect on successes: Which aspects of the Card Creator and the gameplay loop are you most proud of? Did it successfully fix the pipeline bottlenecks?]
 
+The Card Creator tool was a major success. It allowed designers to independently create cards without needing my direct involvement, removing a significant development bottleneck. It standardized data referencing, ensured consistent file organization, and effectively eliminated merge conflicts by cleanly separating out card assets. Additionally, I successfully engineered the core gameplay loop largely on my own, ensuring the backend functioned exactly as intended. Finally, despite the team's initial lack of experience with networked games, we successfully built and integrated a stable, working multiplayer system via Steam.
+
 ### What could be improved or done differently next time?
 
 [Reflect on what didn't work. What systems felt clunky? If you had another month, what would you rewrite or change?]
+
+A notable drawback was the reliance on a monolithic Dealer actor. Consolidating the core logic within a single, massive blueprint made it increasingly difficult to manage as team contributions grew. The blueprint's scale intimidated other developers from making changes and frequently resulted in merge conflicts. Furthermore, teammates struggled to comprehend the underlying game logic, preventing them from extending the systems and ultimately leaving several placeholder mechanics in the final product. In the future, I should prioritize onboarding team members and writing detailed technical documentation over creating the systems entirely independently.
+
+Moreover, while the Card Creator was functionally robust, the accompanying shop system was largely scrapped because an interface was never finalized for it. Reallocating the time I invested in building the external tool toward directly developing the shop UI itself might have yielded a more complete final game.
+
+Overall, I am proud of my technical contributions, even though the final project did not reach the level of polish I originally aimed for. I performed my roles to the best of my ability and developed indispensable skills in data-driven architecture and multiplayer integration. Navigating the larger team dynamic also provided crucial lessons. Communication challenges occasionally left me uncertain about teammates' tasks, and I frequently had to assume unassigned responsibilities—such as proactively building the initial prototype—to prevent the project from stalling. These experiences have thoroughly prepared me for future collaborative development.
 
 ---
 
 ## Bibliography
 
-[Use UCA's Harvard Referencing Format. Example: Rollings, A. and Adams, E. (2003) *Andrew Rollings and Ernest Adams on Game Design*. New Riders Publishing.]
+Curve Animation (2024) _Liar's Bar_. [Video game]. PC: Curve Animation.
+
+Epic Games (2026) _Data-Driven Gameplay Elements_. Available at: https://dev.epicgames.com/documentation/en-us/unreal-engine/data-driven-gameplay-in-unreal-engine (Accessed: 19 April 2026).
+
+Li, S., Zhao, Y. and Wang, X. (2024) 'Analysis of Bluffing by DQN and CFR in Leduc Hold'em Poker', _arXiv_, 2401.08522v1 [cs.GT]. Available at: https://arxiv.org/abs/2401.08522 (Accessed: 19 April 2026).
 
 ---
 
