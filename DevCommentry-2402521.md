@@ -14,7 +14,7 @@
 
 This commentary documents my contributions as a developer on _Greedy Piggies_, a multiplayer card game developed in Unreal Engine 5 (Epic Games, 2026) as part of a group project, with the goal of a commercial release on Steam (Valve Corporation, 2026). The game is a bluffing and betting card game for 2–4 players, in which each player places cards face-down, declares a score value, and then faces the risk of being audited by their opponents. If an auditor successfully catches a bluff, the active player loses their declared value; if the challenge fails, the auditor pays the penalty instead. Players also periodically visit a shop to purchase special ability cards, adding a strategic layer to the core loop. My primary responsibilities spanned the full backend of the game: designing and implementing this core gameplay loop, developing the turn and audit systems, integrating Steam-based multiplayer networking, and building a bespoke **Card Creator** tool to support the design pipeline. The Card Creator, implemented as an Editor Utility Widget, was specifically intended to reduce production bottlenecks by allowing designers to create and register special ability cards independently, without requiring direct programmer involvement. Underpinning all systems is a data-driven architecture using Unreal's Data Tables and Data Assets, which ensured clean version control and prevented merge conflicts as the team scaled. Whilst the final game did not reach the level of polish originally intended, the core systems—including the gameplay loop, data architecture, and multiplayer integration—functioned as designed and represent the primary focus of this write-up.
 
-![RACI Chart](assets/images/raci_chart.png)  
+![RACI Chart](https://pub-9c6c59cb1e3f474f938dca895e9f576d.r2.dev/GreedyPiggies/raci_chart.png)  
 *Figure 1: Project RACI Chart showing developer responsibilities.*
 
 ---
@@ -120,12 +120,12 @@ To support this loop, I formatted the assets such that each player instantiation
 
 Furthermore, I grouped logic using standard `Custom Event` nodes to manage adding and removing data from the Hand object. This was an essential design decision that provided team members an accessible interface to manipulate a player's hand state via standardized array execution paths (utilizing `Add` and `Remove Item` array nodes), without requiring them to parse or modify the underlying variable structures directly.
 
-![add to hand and remove from hand custom events](assets/images/bp_hand_custom_events.png)  
+![add to hand and remove from hand custom events](https://pub-9c6c59cb1e3f474f938dca895e9f576d.r2.dev/GreedyPiggies/bp_hand_custom_events.png)  
 *Figure 3: Blueprint Custom Events for Hand Data manipulation.*
 
 This clean data access allowed me to rapidly implement simple AI opponents to facilitate loop testing. While incorporating AI was initially seen as a secondary task, we had identified that proper multiplayer implementation would take substantial time for the team to learn and integrate. Without AI, testing the gameplay would be stalled until the network architecture was finalized. By building rudimentary AI directly into the Dealer blueprint, we unblocked our rapid iterations, even though these AI routines were not intended for the final release.
 
-![logic for AI picking random cards in their hand to play](assets/images/ai_card_selection_logic.png)  
+![logic for AI picking random cards in their hand to play](https://pub-9c6c59cb1e3f474f938dca895e9f576d.r2.dev/GreedyPiggies/ai_card_selection_logic.png)  
 *Figure 4: Algorithmic logic for AI card selection and bluff determination.*
 
 ### Dealer Actor Logic
@@ -171,7 +171,7 @@ graph TD
 
 #### Start Game
 
-![start game blueprints](assets/images/bp_start_game.png)  
+![start game blueprints](https://pub-9c6c59cb1e3f474f938dca895e9f576d.r2.dev/GreedyPiggies/bp_start_game.png)  
 *Figure 6: Blueprint logic for session initialization and card distribution.*
 
 The sequence for initiating a game session dictates three critical paths:
@@ -203,7 +203,7 @@ graph TD
 
 #### Turn
 
-![turn blueprints](assets/images/bp_turn_logic.png)  
+![turn blueprints](https://pub-9c6c59cb1e3f474f938dca895e9f576d.r2.dev/GreedyPiggies/bp_turn_logic.png)  
 *Figure 8: Unreal Engine Blueprint logic for the turn progression system.*
 
 The Turn system orchestrates the input polling pipeline and individual player progression step-by-step:
@@ -264,7 +264,7 @@ For testing the prototype, inputs and prompts were routed explicitly through loc
 
 The logic operates recursively: utilizing a `Sequence` execution node framework, it systematically asks each player their intent, relying on the input graph to poll their keyboard event before proceeding to the subsequent target. Should any single participant choose to initiate an audit, the query loop instantly breaks, blocking following players from further interface events (using a `Disable Input` node) and transitioning immediately into finalizing the audit math sequence. This recursive event-block system, despite not being perfectly optimized, was the most direct solution to actualize a playable proof-of-concept.
 
-![logic for asking each player for audit decision](assets/images/bp_audit_decision_logic.png)  
+![logic for asking each player for audit decision](https://pub-9c6c59cb1e3f474f938dca895e9f576d.r2.dev/GreedyPiggies/bp_audit_decision_logic.png)  
 *Figure 10: Recursive audit polling logic for human and AI players.*
 
 ```mermaid
@@ -297,7 +297,7 @@ In pursuit of data integrity, card configurations—such as values, suits, visua
 
 Therefore, actively dealt cards are handled strictly via corresponding integer indexes managed cleanly in a basic array. Whenever a system needs to identify graphic metadata or value strings, the script explicitly uses a `Get Data Table Row` node to query the Data Table securely. Utilizing a `Break` node on the output struct provides exact access to the desired fields, eliminating convoluted variable clusters holding assorted disparate data types.
 
-![card data table](assets/images/dt_card_data_table.png)  
+![card data table](https://pub-9c6c59cb1e3f474f938dca895e9f576d.r2.dev/GreedyPiggies/dt_card_data_table.png)  
 *Figure 12: Unreal Engine Data Table (DT_Deck) structure for card metadata.*
 
 ### Score Calculation
@@ -306,7 +306,7 @@ Scores calculate directly against the real values queried from the static Data T
 
 The authoritative calculation must run comprehensively behind the scenes regardless of player intent; otherwise, validating an auditor's success rate would remain impossible safely verify.
 
-![play cards function](assets/images/bp_calculate_score.png)  
+![play cards function](https://pub-9c6c59cb1e3f474f938dca895e9f576d.r2.dev/GreedyPiggies/bp_calculate_score.png)  
 *Figure 13: Technical implementation of the CalculateScore function and multipliers.*
 
 ```mermaid
@@ -353,12 +353,12 @@ To mitigate our mutual unfamiliarity with Unreal Engine's replication paradigms,
 
 To assist designers in producing continuous creative output effortlessly, I developed the **Card Creator**, a technical production tool formatted directly as a proprietary Editor Utility Widget. This tool was a cornerstone of our technical production strategy, intended to decouple gameplay design from core engineering and bypass the "programmer bottleneck" that often stalls balance iterations.
 
-![Card Creator UI](assets/images/image.png)  
+![Card Creator UI](https://pub-9c6c59cb1e3f474f938dca895e9f576d.r2.dev/GreedyPiggies/CardCreationForm.png)  
 *Figure 15: The Card Creator Editor Utility Widget (EUW) interface.*
 
 The tool functions by taking form-based inputs—such as card name, rarity, and price—and programmatically triggering the `Construct Object from Class` node to generate a matching `UDataAsset`. 
 
-![Card Creator Logic](assets/images/image-3.png)  
+![Card Creator Logic](https://pub-9c6c59cb1e3f474f938dca895e9f576d.r2.dev/GreedyPiggies/image-3.png)  
 *Figure 16: Unreal Engine Blueprint logic governing automated asset generation.*
 
 These generated assets are automatically registered into the main card database and assigned a unique ID, ensuring they are immediately ready for use in the live game without any manual code entry.

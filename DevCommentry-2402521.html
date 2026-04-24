@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>DevCommentry-2402521.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="greedy-piggies-development-commentary">Greedy Piggies Development Commentary</h1>
+<p><strong>Unit Name:</strong> FGCT5017 - Tools and Production</p>
+<p><strong>Student Name:</strong> Harry Dillamore</p>
+<p><strong>Student ID:</strong> 2402521</p>
+<p><strong>Build Link:</strong> <a href="https://github.com/University-for-the-Creative-Arts/Greedy_Piggies/releases">https://github.com/University-for-the-Creative-Arts/Greedy_Piggies/releases</a></p>
+<hr>
+<h2 id="abstract">Abstract</h2>
+<p>This commentary documents my contributions as a developer on <em>Greedy Piggies</em>, a multiplayer card game developed in Unreal Engine 5 (Epic Games, 2026) as part of a group project, with the goal of a commercial release on Steam (Valve Corporation, 2026). The game is a bluffing and betting card game for 2–4 players, in which each player places cards face-down, declares a score value, and then faces the risk of being audited by their opponents. If an auditor successfully catches a bluff, the active player loses their declared value; if the challenge fails, the auditor pays the penalty instead. Players also periodically visit a shop to purchase special ability cards, adding a strategic layer to the core loop. My primary responsibilities spanned the full backend of the game: designing and implementing this core gameplay loop, developing the turn and audit systems, integrating Steam-based multiplayer networking, and building a bespoke <strong>Card Creator</strong> tool to support the design pipeline. The Card Creator, implemented as an Editor Utility Widget, was specifically intended to reduce production bottlenecks by allowing designers to create and register special ability cards independently, without requiring direct programmer involvement. Underpinning all systems is a data-driven architecture using Unreal's Data Tables and Data Assets, which ensured clean version control and prevented merge conflicts as the team scaled. Whilst the final game did not reach the level of polish originally intended, the core systems—including the gameplay loop, data architecture, and multiplayer integration—functioned as designed and represent the primary focus of this write-up.</p>
+<p><img src="https://pub-9c6c59cb1e3f474f938dca895e9f576d.r2.dev/GreedyPiggies/raci_chart.png" alt="RACI Chart"><br>
+<em>Figure 1: Project RACI Chart showing developer responsibilities.</em></p>
+<hr>
+<h2 id="research">Research</h2>
+<p>My research validates the <strong>interdependence of technical stability and player psychology</strong>. I focused on proving that data-driven architecture is the industry standard for reducing production friction, while grounding the &quot;Audit&quot; mechanic in game theory to ensure the loop remains engaging.</p>
+<ul>
+<li><strong>Explored:</strong> <strong>Official engine documentation</strong> to justify technical implementation and <strong>peer-reviewed papers</strong> to validate the &quot;suspense&quot; factor. I included a <strong>commercial case study</strong> to analyze state machine transitions.</li>
+<li><strong>Avoided:</strong> Hobbyist blogs and YouTube tutorials. These lack the authoritative weight required for university-level architecture and often promote &quot;spaghetti&quot; logic that ignores scalability.</li>
+<li><strong>Outcomes:</strong> This research ensures the experience is &quot;fair&quot; (via theory) and the technical approach is &quot;scalable&quot; (via data-driven design), meeting both creative and professional production aims.</li>
+</ul>
+<hr>
+<h4 id="source-1-academic-game-theory">Source 1: Academic (Game Theory)</h4>
+<p>Li, Zhao, and Wang’s (2024) study on <strong>imperfect-information games</strong> is highly relevant as it mathematically defines why &quot;bluffing&quot; is a structural necessity to prevent a &quot;solved&quot; (and boring) meta.</p>
+<ul>
+<li><strong>Strategic Unpredictability:</strong> I learned that without an audit mechanic, games become &quot;exploitable,&quot; where players with the best cards always win.</li>
+<li><strong>Information Asymmetry:</strong> The paper's &quot;Bayesian probabilistic model&quot; informed my UI—giving players enough info for a &quot;calculated&quot; audit.</li>
+<li><strong>The Cost of Deception:</strong> Analyzing &quot;Counterfactual Regret Minimization&quot; helped me balance the penalties for failed bluffs.</li>
+</ul>
+<p><strong>Evaluation:</strong> This source provides a mathematical backbone for &quot;fun.&quot; Its limitation is the focus on AI; I had to translate its &quot;Nash Equilibrium&quot; findings into rules that feel intuitive for human players.</p>
+<hr>
+<h4 id="source-2-game-source-case-study">Source 2: Game Source (Case Study)</h4>
+<p><em>Liar’s Bar</em> (Curve Animation, 2024) mirrors the core &quot;Audit&quot; and &quot;Betting&quot; mechanics of my project. Analyzing its success provides a blueprint for how state machines facilitate complex human interaction.</p>
+<ul>
+<li><strong>State Machine Transitions:</strong> I analyzed the transition between &quot;Card Play&quot; and &quot;Reaction.&quot; <em>Liar's Bar</em> uses forced delays to build tension, which I replicated in my loop.</li>
+<li><strong>Visual Feedback:</strong> The game uses high-stakes animations to signal a round's end, teaching me that the &quot;Audit&quot; requires a distinct &quot;Reveal Phase.&quot;</li>
+<li><strong>Network Sync:</strong> I studied its server-authoritative checks to ensure all clients see the same &quot;truth&quot; simultaneously.</li>
+</ul>
+<p><strong>Evaluation:</strong> Excellent for UI/UX inspiration. However, as an Early Access title, its handling of technical edge cases is still evolving, requiring me to cross-reference with official documentation.</p>
+<hr>
+<h4 id="source-3-technical-documentation">Source 3: Technical Documentation</h4>
+<p>This is the official technical standard (Epic Games, 2026) provided by the creators of Unreal Engine. It details the intended use of <code>UDataAsset</code>, <code>FStruct</code>, and <code>UDataTable</code>.</p>
+<ul>
+<li><strong>Decoupling:</strong> The documentation confirms that moving card stats into <strong>Data Assets</strong> is the &quot;correct&quot; way to prevent Git (2026) merge conflicts.</li>
+<li><strong>Efficiency:</strong> I learned how <code>UDataAsset</code> handles asynchronous loading, ensuring performance remains stable as the library scales.</li>
+<li><strong>Tooling:</strong> This provided the API references needed to build the <strong>Card Creator</strong> tool using Editor Utility Widgets.</li>
+</ul>
+<p><strong>Evaluation:</strong> This is my most vital source. It architecturally proves that my &quot;Card Creator&quot; is an industry-standard optimization that ensures project stability as the team grows.</p>
+<hr>
+<h4 id="source-4-industry-insight-workflow--maintenance">Source 4: Industry Insight (Workflow &amp; Maintenance)</h4>
+<p>The Outscal (2024) technical blog addresses the specific friction points of large-team development, specifically regarding Blueprint maintenance.</p>
+<ul>
+<li>
+<p><strong>Modular Logic:</strong> I analyzed the importance of &quot;Blueprint Function Libraries&quot; to ensure logic is reusable, preventing redundant code across the team.</p>
+</li>
+<li>
+<p><strong>Conflict Mitigation:</strong> The source highlights that because Blueprints are binary files, moving variable data into Data Assets is essential for parallel workflow.</p>
+</li>
+<li>
+<p><strong>Encapsulation:</strong> I learned that keeping logic &quot;Private&quot; within the state machine prevents accidental breaks by other developers.</p>
+</li>
+</ul>
+<p><strong>Evaluation:</strong> This source identifies the &quot;human element&quot;—how teams break projects. It provides a practical &quot;Standard Operating Procedure&quot; that ensures the codebase remains maintainable.</p>
+<hr>
+<h2 id="implementation">Implementation</h2>
+<h3 id="initial-prototyping">Initial Prototyping</h3>
+<p>During the initial prototyping phase, the primary focus was on establishing a functional version of the game loop. To achieve this quickly, I utilized barebones visuals and inputs, allowing the team to test the core mechanics without being hindered by polished art or complex UI.</p>
+<p>The core flow of this loop is detailed in the flowchart below (Mermaid.js, 2026):</p>
+<pre><code class="language-mermaid"><div class="mermaid">graph TD
+    Start[Start Game] --> Deal[Deal 5 cards to players]
+    Deal --> TurnStart[Player Turn Starts]
+    TurnStart --> PlayCards["Player places 3 cards face down & declares value"]
+    PlayCards --> AuditPhase{"Do other players audit?"}
+
+    AuditPhase -->|No| NoAudit[Player wins declared value]
+    AuditPhase -->|Yes| AuditCheck{"Did the player lie?"}
+
+    AuditCheck -->|Yes - Auditor Wins| PlayerLoses[Current player loses declared value]
+    AuditCheck -->|No - Player Wins| AuditorLoses[Auditor loses declared value]
+
+    NoAudit --> Score[Update Scores]
+    PlayerLoses --> Score
+    AuditorLoses --> Score
+
+    Score --> CheckElimination{"Player < -50k?"}
+    CheckElimination -->|Yes| Eliminate[Eliminate Player]
+    CheckElimination -->|No| CheckEnd{"Any Player >= 250k?"}
+    Eliminate --> CheckEnd
+
+    CheckEnd -->|No| NextTurn[Next Player Turn]
+    NextTurn --> TurnStart
+
+    CheckEnd -->|Yes| EndGame[Game Ends]
+</div></code></pre>
+<p><em>Figure 2: Core Gameplay Loop Flowchart (Prototype implementation).</em></p>
+<p>To support this loop, I formatted the assets such that each player instantiation would create a distinct &quot;Hand&quot; object. This foundational object acts as a localized data container, storing the cards actively held by the player and their total running score. By centralizing this data into a specific object, the logic pipeline became much more robust and scalable. For instance, testing diverse character variants became a streamlined process; introducing a new character merely required assigning them a new Hand object, as the underlying architecture was already modular.</p>
+<p>Furthermore, I grouped logic using standard <code>Custom Event</code> nodes to manage adding and removing data from the Hand object. This was an essential design decision that provided team members an accessible interface to manipulate a player's hand state via standardized array execution paths (utilizing <code>Add</code> and <code>Remove Item</code> array nodes), without requiring them to parse or modify the underlying variable structures directly.</p>
+<p><img src="https://pub-9c6c59cb1e3f474f938dca895e9f576d.r2.dev/GreedyPiggies/bp_hand_custom_events.png" alt="add to hand and remove from hand custom events"><br>
+<em>Figure 3: Blueprint Custom Events for Hand Data manipulation.</em></p>
+<p>This clean data access allowed me to rapidly implement simple AI opponents to facilitate loop testing. While incorporating AI was initially seen as a secondary task, we had identified that proper multiplayer implementation would take substantial time for the team to learn and integrate. Without AI, testing the gameplay would be stalled until the network architecture was finalized. By building rudimentary AI directly into the Dealer blueprint, we unblocked our rapid iterations, even though these AI routines were not intended for the final release.</p>
+<p><img src="https://pub-9c6c59cb1e3f474f938dca895e9f576d.r2.dev/GreedyPiggies/ai_card_selection_logic.png" alt="logic for AI picking random cards in their hand to play"><br>
+<em>Figure 4: Algorithmic logic for AI card selection and bluff determination.</em></p>
+<h3 id="dealer-actor-logic">Dealer Actor Logic</h3>
+<p>The Dealer actor functions as the authoritative controller for the game, responsible for allocating cards to players and managing the bulk of the overarching turn logic. Centralizing this logic into a single authoritative actor was a conscious choice to simplify tracking state and streamline debugging in a multiplayer environment.</p>
+<p>While I initially attempted to migrate this logic out into separate components—thereby theoretically allowing multiple team members to work on the logic simultaneously—this approach was ultimately abandoned. The team struggled to adapt to a component-based workflow, and since there was a limited number of developers actively programming the central game loop, the organizational overhead of component routing outweighed the benefits.</p>
+<p>Instead, the logic remains effectively segmented across numerous discrete custom events, allowing elements of the game loop to be triggered cleanly.</p>
+<pre><code class="language-mermaid"><div class="mermaid">graph TD
+    SystemStart["Begin Play / Initialize"] --> Setup["Setup Deck and Narrator"]
+    Setup --> StartDeal["Deal 5 Cards to Players"]
+    StartDeal --> TurnStart["Evaluate Turn Count"]
+
+    TurnStart --> ShopCheck{"Is it a Shop Turn?"}
+    ShopCheck -->|Yes| ShopPhase["Shop Phase"]
+    ShopPhase --> NextTurn["Next Player / Increment Turn"]
+
+    ShopCheck -->|No| PlayerTurn["Regular Turn"]
+    PlayerTurn --> SelectCards["Poll Input: Player selects 3 cards"]
+    SelectCards --> DeclareValue["Player declares a value"]
+    DeclareValue --> AuditPhase{"Audit Phase"}
+
+    AuditPhase -->|Audited| AuditLogic{"Did the player lie?"}
+    AuditPhase -->|Not Audited| ApplyValues["Apply Declared Score"]
+
+    AuditLogic -->|Yes - Auditor Wins| PlayerLostVal["Current player loses declared value"]
+    AuditLogic -->|No - Player Wins| AuditorLostVal["Auditor loses declared value"]
+
+    PlayerLostVal --> Score["Update Scores"]
+    AuditorLostVal --> Score
+    ApplyValues --> Score
+
+    Score --> CheckState{"Check Win/Loss Conditions"}
+    CheckState -->|Game Continues| NextTurn
+    CheckState -->|Game Over| EndGame["End Game"]
+
+    NextTurn --> TurnStart
+</div></code></pre>
+<p><em>Figure 5: Authoritative Dealer Actor state machine logic.</em></p>
+<h4 id="start-game">Start Game</h4>
+<p><img src="https://pub-9c6c59cb1e3f474f938dca895e9f576d.r2.dev/GreedyPiggies/bp_start_game.png" alt="start game blueprints"><br>
+<em>Figure 6: Blueprint logic for session initialization and card distribution.</em></p>
+<p>The sequence for initiating a game session dictates three critical paths:</p>
+<ol>
+<li><strong>Initialization (BeginPlay):</strong> Upon the game starting, the Dealer's <code>Event BeginPlay</code> node triggers the <code>GetNarratorBPReference</code> custom event. This utilizes the <code>Get All Actors Of Class</code> node to locate the <code>BP_NarratorManager</code> and connects to a <code>Set</code> node to securely cache a reference to it in the <code>NarratorManagerRef</code> variable. Caching this on initialization prevents the performance tax of dynamically searching for the narrator throughout active gameplay.</li>
+<li><strong>Game Reset (StartGame):</strong> The <code>StartGame</code> custom event acts as a session initialize, executing <code>ResetActiveIndex</code> to safely clear and prepare a fresh localized Card Pool.</li>
+<li><strong>Dealing Phase (StartingDeal):</strong> This event is responsible for dispensing the initial set of cards to all active players. By executing a primary <code>For Loop</code> macro node five times, and nesting a secondary <code>For Each Loop</code> node that cycles through the <code>hands</code> array (utilizing a <code>Get</code> node to access specific player Hands), the <code>DealCard</code> function iteratively distributes starting cards exactly as a physical dealer would interactively dispense them. Following the completion of this dealing sequence, the primary <code>Turn</code> function is called to begin the game cycle.</li>
+</ol>
+<pre><code class="language-mermaid"><div class="mermaid">graph TD
+    subgraph Initialization
+    BP([Event Begin Play]) --> CallGetNar[Call GetNarratorBPReference]
+    EventGetNar([Event GetNarratorBPReference]) --> GetAll[Get All Actors of Class: BP_NarratorManager]
+    GetAll --> SetRef[Set NarratorManagerRef]
+    end
+
+    subgraph Prepare Deck
+    StartG([Event StartGame]) --> Reset[ResetActiveIndex <br/> 'Resets CardPool']
+    end
+
+    subgraph Dealing Cards
+    Deal([Event StartingDeal]) --> ForLoop[For Loop <br/> First:0, Last:4]
+    ForLoop -- Loop Body --> ForEach[For Each Loop <br/> Array: hands]
+    ForEach -- Loop Body --> DealCard[DealCard]
+    ForLoop -- Completed --> Turn[Call Turn]
+    end
+</div></code></pre>
+<p><em>Figure 7: Functional breakdown of the StartingDeal execution path.</em></p>
+<h4 id="turn">Turn</h4>
+<p><img src="https://pub-9c6c59cb1e3f474f938dca895e9f576d.r2.dev/GreedyPiggies/bp_turn_logic.png" alt="turn blueprints"><br>
+<em>Figure 8: Unreal Engine Blueprint logic for the turn progression system.</em></p>
+<p>The Turn system orchestrates the input polling pipeline and individual player progression step-by-step:</p>
+<ol>
+<li><strong>Turn &amp; Shop Tracking:</strong> When triggered, the <code>Turn</code> custom event utilizes a Server check via the <code>Switch Has Authority</code> macro to safely increment <code>TotalTurnCount</code>. A <code>Modulo (%)</code> math node paired with an <code>Equal (==)</code> integer check controls the integration of the supplementary Shop Phase gracefully between standard turns.</li>
+<li><strong>Turn Initialization:</strong> On a standard turn, the active player's context is established. The current target hand is grabbed via a <code>Get</code> copy, successfully validated and cast using a <code>Cast To BP_FirstPersonCharacter</code> node, and cached as <code>player</code> securely via a <code>Set</code> node. The turn's real localized score parameters are reset to zero.</li>
+<li><strong>Input Polling:</strong> A visual prompt reading &quot;select 3 cards&quot; is dispatched. Subsequently, an input polling loop introduces an intentional 0.2-second <code>Delay</code> node to seamlessly wait. The loop conditionally checks the <code>Length</code> of the <code>player.chosenCards</code> array against a <code>Less (&lt;)</code> integer math node to break only when precisely 3 cards register.</li>
+<li><strong>Value Declaration Prep:</strong> Upon validation, the gating loop ceases via a <code>Branch</code> node's True execution logic. The player's core input framework locks temporarily by Setting <code>inputValue = false</code>, and execution moves to a <code>Set Visibility</code> node to highlight the next mandatory phase, commanding the user through a <code>Print String</code> node to declare the actual or deceptive value of their hand.</li>
+</ol>
+<pre><code class="language-mermaid"><div class="mermaid">graph TD
+    Turn([Event Turn]) --> Auth{Switch Has Authority}
+    Auth -- Authority --> Inc[Increment TotalTurnCount]
+    Inc --> ModCheck{TotalTurnCount % 4 == 0?}
+
+    ModCheck -- Yes --> Shop[CloseShop / Trigger Shop Phase]
+    ModCheck -- No --> ResetScore[Set realScore = 0]
+
+    ResetScore --> GetPlayer[Get Current Player Hand <br/> Cast to Player Character]
+    GetPlayer --> Cache[Set 'player' reference]
+    Cache --> Prompt1[Print: 'select 3 cards']
+
+    Prompt1 --> CheckCards{chosenCards.Length < 3?}
+    CheckCards -- True --> Delay[Delay 0.2s]
+    Delay --> CheckCards
+
+    CheckCards -- False --> PrepInput[Set inputValue = false <br/> Update UI]
+    PrepInput --> Prompt2[Print: 'write a value...']
+</div></code></pre>
+<h3 id="auditing">Auditing</h3>
+<p>To introduce a strong element of game theory and bluffing, an intricate auditing system was devised where players can formally challenge each other's score declarations. The core sequence of interactions proceeds as follows:</p>
+<ol>
+<li>The active player confidentially selects 3 face-down cards to place in the center field.</li>
+<li>The player publicly declares the combined score value of these cards.</li>
+<li>Regardless of the declaration, the game's authoritative state internally evaluates the truthful mathematical outcome of the physical cards submitted.</li>
+<li>If a player submits a truthful declaration and remains unaudited, they naturally win their declared sum. Conversely, a deceitful declaration that goes unaudited will cost them their falsely claimed value.</li>
+<li>If the player is successfully audited, a conflict emerges: an honest active player will cause the accusing auditor to lose the claimed value as a penalty. A dishonest active player, successfully caught in a bluff by an auditor, suffers the penalty themselves.</li>
+</ol>
+<pre><code class="language-mermaid"><div class="mermaid">flowchart TD
+    A[Player chooses 3 cards to play face down] --> B[Player declares the value of their cards]
+    B --> C[Game checks if declaration is true or false]
+    C --> D{Is the player audited?}
+
+    D -- "Not Audited" --> E{Is declaration true?}
+    E -- "True" --> F([Player wins the declared value])
+    E -- "False" --> G([Player wins the declared value])
+
+    D -- "Audited" --> H{Is declaration true?}
+    H -- "True" --> I([Auditor loses the declared value])
+    H -- "False" --> J([Player loses the declared value])
+</div></code></pre>
+<p><em>Figure 9: The &quot;Audit Conflict&quot; game theory flowchart.</em></p>
+<p>For testing the prototype, inputs and prompts were routed explicitly through localized <code>Print String</code> nodes combined with basic Key Event nodes mapping out &quot;Y&quot; or &quot;N&quot; decisions directly down the sequential player order. AI characters integrated into the prototype would procedurally resolve an audit determination via a <code>Random Integer in Range</code> node and evaluate the outcome securely via <code>Branch</code> logic checks before printing the choice to visually confirm functionality.</p>
+<p>The logic operates recursively: utilizing a <code>Sequence</code> execution node framework, it systematically asks each player their intent, relying on the input graph to poll their keyboard event before proceeding to the subsequent target. Should any single participant choose to initiate an audit, the query loop instantly breaks, blocking following players from further interface events (using a <code>Disable Input</code> node) and transitioning immediately into finalizing the audit math sequence. This recursive event-block system, despite not being perfectly optimized, was the most direct solution to actualize a playable proof-of-concept.</p>
+<p><img src="https://pub-9c6c59cb1e3f474f938dca895e9f576d.r2.dev/GreedyPiggies/bp_audit_decision_logic.png" alt="logic for asking each player for audit decision"><br>
+<em>Figure 10: Recursive audit polling logic for human and AI players.</em></p>
+<pre><code class="language-mermaid"><div class="mermaid">flowchart TD
+    Start([Begin Audit Loop]) --> CheckPlayers{Are there more players to ask?}
+
+    CheckPlayers -- "Yes" --> IsAI{Is the current player AI?}
+
+    IsAI -- "Yes" --> AIChoice[AI makes a random decision]
+    IsAI -- "No" --> HumanChoice[Print prompt, wait for 'y' or 'n' key press]
+
+    AIChoice --> PrintDecision[Print decision to console]
+    HumanChoice --> PrintDecision
+
+    PrintDecision --> DidAudit{Did they choose to audit?}
+
+    DidAudit -- "No" --> RecursiveCall[Recursive Call: Move to Next Player]
+    RecursiveCall --> CheckPlayers
+
+    DidAudit -- "Yes" --> StopAsking[Stop taking inputs from remaining players]
+    StopAsking --> RunCalc([Run Audit Calculations])
+
+    CheckPlayers -- "No" --> NoAudit([End Audit Phase: No one audited])
+</div></code></pre>
+<p><em>Figure 11: Algorithmic detail of the recursive audit loop.</em></p>
+<h3 id="card-setup">Card Setup</h3>
+<p>In pursuit of data integrity, card configurations—such as values, suits, visual paths, and respective index IDs—are hardcoded into an Unreal Data Table. Utilizing a Data Table provides a static framework guaranteed against unexpected runtime mutations.</p>
+<p>Therefore, actively dealt cards are handled strictly via corresponding integer indexes managed cleanly in a basic array. Whenever a system needs to identify graphic metadata or value strings, the script explicitly uses a <code>Get Data Table Row</code> node to query the Data Table securely. Utilizing a <code>Break</code> node on the output struct provides exact access to the desired fields, eliminating convoluted variable clusters holding assorted disparate data types.</p>
+<p><img src="https://pub-9c6c59cb1e3f474f938dca895e9f576d.r2.dev/GreedyPiggies/dt_card_data_table.png" alt="card data table"><br>
+<em>Figure 12: Unreal Engine Data Table (DT_Deck) structure for card metadata.</em></p>
+<h3 id="score-calculation">Score Calculation</h3>
+<p>Scores calculate directly against the real values queried from the static Data Table via the previously mentioned <code>Get Data Table Row</code> nodes. Baseline point distributions execute by combining a <code>Get</code> node function with an Integer <code>Multiply (*)</code> node, systematically multiplying a card's face value by 1000. Subsequent combo modifiers apply multiplicatively dictating routing via <code>Branch</code> and <code>Switch on Int</code> sequences: an identical pair generates double their standard baseline, whereas an identical set of three produces triple the baseline output.</p>
+<p>The authoritative calculation must run comprehensively behind the scenes regardless of player intent; otherwise, validating an auditor's success rate would remain impossible safely verify.</p>
+<p><img src="https://pub-9c6c59cb1e3f474f938dca895e9f576d.r2.dev/GreedyPiggies/bp_calculate_score.png" alt="play cards function"><br>
+<em>Figure 13: Technical implementation of the CalculateScore function and multipliers.</em></p>
+<pre><code class="language-mermaid"><div class="mermaid">graph TD
+    Start([CalculateScore]) --> Setup[Initialize Local Variables & <br/> Clear removeFromHand]
+    Setup --> Loop1[For Each Loop: _chosenCards]
+
+    Loop1 -- Loop Body --> GetCard[Get Card ID from hand using index]
+    GetCard --> AddToRemove[Add Card ID to removeFromHand]
+    AddToRemove --> Lookup[Lookup Face Value in DT_Deck]
+
+    Lookup --> CheckMultipliers{Check for Pairs/Triples}
+    CheckMultipliers -- "Triple (3 of a kind)" --> Mult3[Face Value * 3]
+    CheckMultipliers -- "Pair (2 of a kind)" --> Mult2[Face Value * 2]
+    CheckMultipliers -- "Unique" --> Mult1[Face Value * 1]
+
+    Mult3 --> Apply1000[Value * 1000]
+    Mult2 --> Apply1000
+    Mult1 --> Apply1000
+
+    Apply1000 --> AddScore[_score += Final Value]
+    AddScore --> Loop1
+
+    Loop1 -- Completed --> Loop2[For Each Loop: removeFromHand]
+
+    Loop2 -- Loop Body --> RemoveCard[RemoveItem: Card ID from hand]
+
+    Loop2 -- Completed --> Return([Return _score])
+</div></code></pre>
+<p><em>Figure 14: Logic flowchart for the scoring and combo multiplication system.</em></p>
+<h3 id="multiplayer">Multiplayer</h3>
+<p>Developing true multiplayer logic was a significant milestone, primarily because creating networked gaming applications was an entirely novel discipline for myself prior to the project. Consequently, an expansive degree of preliminary research was necessary, performed collaboratively alongside Bradley and Josie.</p>
+<p>To mitigate our mutual unfamiliarity with Unreal Engine's replication paradigms, we adopted paired and group programming frameworks dynamically to unblock each other when confronted with severe networking issues. This well-documented software engineering technique proved incredibly valuable in establishing rapid knowledge exchange and ensuring we maintained operational cadence as a collective team. Overall, transitioning the monolithic framework to utilize Server-client procedures represented an immense undertaking involving shifting substantial workloads from the end user to the server's jurisdiction securely.</p>
+<ul>
+<li><strong>Server Authority:</strong> Resolving game-critical parameters—such as manipulating the <code>TotalTurnCount</code> or governing cyclic turn boundaries—currently predicates exclusively upon <code>Switch Has Authority</code> implementations. Utilizing this macro safely ring-fences our game flow execution uniquely to the Server architecture, guaranteeing malicious or out-of-sync clients remain mathematically unable to unilaterally exploit cycle sequences.</li>
+<li><strong>Remote Procedure Calls (RPCs):</strong> To pass input over boundaries back to the authoritative environment safely, the central Dealer blueprint employs specific, targeted Custom Events structured as Remote Procedure Calls:
+<ul>
+<li><code>ServerIsAuditing</code>: Constructed structurally as a Run-On-Server RPC, this event serves specifically to empower connected clients navigating their customized Audit Phase prompts to submit asynchronous decisions securely upwards, sending their explicit <code>PlayerIndex</code> paired tightly with an <code>Auditing</code> truth flag safely to the game master.</li>
+<li><code>UpdateAllScores</code>: Organized equivalently as a Server-driven or Multicast RPC configuration, this logic ensures that upon the definitive conclusion of the rigorous audit math resolution steps, an authenticated, universal copy of the final player scores is replicated to all peripheral machines concurrently locking client UI states tightly unified visually.</li>
+</ul>
+</li>
+</ul>
+<h3 id="card-creator">Card Creator</h3>
+<p>To assist designers in producing continuous creative output effortlessly, I developed the <strong>Card Creator</strong>, a technical production tool formatted directly as a proprietary Editor Utility Widget. This tool was a cornerstone of our technical production strategy, intended to decouple gameplay design from core engineering and bypass the &quot;programmer bottleneck&quot; that often stalls balance iterations.</p>
+<p><img src="https://pub-9c6c59cb1e3f474f938dca895e9f576d.r2.dev/GreedyPiggies/CardCreationForm.png" alt="Card Creator UI"><br>
+<em>Figure 15: The Card Creator Editor Utility Widget (EUW) interface.</em></p>
+<p>The tool functions by taking form-based inputs—such as card name, rarity, and price—and programmatically triggering the <code>Construct Object from Class</code> node to generate a matching <code>UDataAsset</code>.</p>
+<p><img src="https://pub-9c6c59cb1e3f474f938dca895e9f576d.r2.dev/GreedyPiggies/image-3.png" alt="Card Creator Logic"><br>
+<em>Figure 16: Unreal Engine Blueprint logic governing automated asset generation.</em></p>
+<p>These generated assets are automatically registered into the main card database and assigned a unique ID, ensuring they are immediately ready for use in the live game without any manual code entry.</p>
+<p>With this tool, a designer inputs statistical specifications explicitly on a form. Once submitted, the backend architecture automatically generates two corresponding artifacts seamlessly using Editor asset creation nodes: a strict Data Asset (using a <code>Construct Object from Class</code> node) dictating core traits, aligned explicitly with an overarching Shop arrays architecture, coupled precisely to an empty Blueprint class automatically instanced to house customized runtime abilities. Taking advantage of standardized Blueprint Interfaces implicitly defines an identical communication standard. Calling the respective interface message node links our universal action-dispatch arrays logically alongside unique, distinct implementations belonging individual cards, preventing systemic pipeline issues cleanly.</p>
+<hr>
+<h2 id="testing">Testing</h2>
+<p>To ensure the technical stability of <em>Greedy Piggies</em>, I conducted a series of iterative tests focusing on the core game loop, data integrity, and networked authoritative logic. The following table outlines the key tests performed during the development of both the game client and the Card Creator tool.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">ID</th>
+<th style="text-align:left">Category</th>
+<th style="text-align:left">Test Description</th>
+<th style="text-align:left">Expected Result</th>
+<th style="text-align:left">Actual Outcome</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>T1</strong></td>
+<td style="text-align:left"><strong>Game Loop</strong></td>
+<td style="text-align:left">Initialize game and execute <code>StartingDeal</code>.</td>
+<td style="text-align:left">5 cards are correctly assigned to the <code>hands</code> array of each player.</td>
+<td style="text-align:left"><strong>PASS</strong> cards are dealt as expected, no duplicates or unintended behaviour.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>T2</strong></td>
+<td style="text-align:left"><strong>Game Loop</strong></td>
+<td style="text-align:left">Progression through a full set of 4 turns.</td>
+<td style="text-align:left">The <code>TotalTurnCount</code> increments correctly and triggers the Shop Phase on turn 4.</td>
+<td style="text-align:left"><strong>PASS</strong> the game progresses through the 4 turns as expected and the shop phase is triggered on turn 4.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>T3</strong></td>
+<td style="text-align:left"><strong>Auditing</strong></td>
+<td style="text-align:left">Audit an &quot;honest&quot; player declaration.</td>
+<td style="text-align:left">Auditor loses the declared value; active player keeps their score.</td>
+<td style="text-align:left"><strong>PASS</strong> the auditor loses the declared value and the active player keeps their score.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>T4</strong></td>
+<td style="text-align:left"><strong>Auditing</strong></td>
+<td style="text-align:left">Audit a &quot;bluffing&quot; player declaration.</td>
+<td style="text-align:left">Active player loses the full declared value; Auditor remains unaffected.</td>
+<td style="text-align:left"><strong>PASS</strong> the active player loses the full declared value and the auditor remains unaffected.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>T5</strong></td>
+<td style="text-align:left"><strong>Tooling</strong></td>
+<td style="text-align:left">Use Card Creator to generate a new card.</td>
+<td style="text-align:left">A valid Data Asset and a corresponding Blueprint class are created in the correct directory.</td>
+<td style="text-align:left"><strong>PASS</strong> the card creator successfully generates a valid Data Asset and a corresponding Blueprint class in the correct directory.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>T6</strong></td>
+<td style="text-align:left"><strong>Tooling</strong></td>
+<td style="text-align:left">Submit invalid data (e.g., negative value) to Card Creator.</td>
+<td style="text-align:left">Form validation prevents asset generation and displays a warning.</td>
+<td style="text-align:left"><strong>FAIL</strong> the card creator only checks that data is of the correct type, and does not validate for the sensible range.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>T7</strong></td>
+<td style="text-align:left"><strong>Networking</strong></td>
+<td style="text-align:left">Join a Steam session as a Client.</td>
+<td style="text-align:left">Client successfully connects to Server and replicates the current game state (Hand/Score).</td>
+<td style="text-align:left"><strong>SEMI-PASS</strong> the client joins sucessfully and replicates the current game state for the most part, but there are a few bugs. The joining client can see their hand and other players but scores do not display correctly.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>T8</strong></td>
+<td style="text-align:left"><strong>Networking</strong></td>
+<td style="text-align:left">Execute <code>ServerIsAuditing</code> RPC from Client.</td>
+<td style="text-align:left">Server receives the request and updates the authoritative audit state for all connected players.</td>
+<td style="text-align:left"><strong>PASS</strong> the server receives the request and updates the authoritative audit state for all connected players.</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>T9</strong></td>
+<td style="text-align:left"><strong>AI Logic</strong></td>
+<td style="text-align:left">Observe AI audit decision-making.</td>
+<td style="text-align:left">AI selects an audit choice based on its random decision node and prints to the console.</td>
+<td style="text-align:left"><strong>PASS</strong> the AI makes a choice and prints it. Through this test I also found that a 50 50 chance of auditing or not auditing was not a good split, as the AI always lost lots of money very quickly.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="critical-reflection">Critical Reflection</h2>
+<h3 id="what-went-well">What went well?</h3>
+<p>The Card Creator tool was a major success. It allowed designers to independently create cards without needing my direct involvement, removing a significant development bottleneck. It standardized data referencing, ensured consistent file organization, and effectively eliminated merge conflicts by cleanly separating out card assets. Additionally, I successfully engineered the core gameplay loop largely on my own, ensuring the backend functioned exactly as intended. Finally, despite the team's initial lack of experience with networked games, we successfully built and integrated a stable, working multiplayer system via Steam.</p>
+<h3 id="what-could-be-improved-or-done-differently-next-time">What could be improved or done differently next time?</h3>
+<p>A notable drawback was the reliance on a monolithic Dealer actor. Consolidating the core logic within a single, massive blueprint made it increasingly difficult to manage as team contributions grew. The blueprint's scale intimidated other developers from making changes and frequently resulted in merge conflicts. Furthermore, teammates struggled to comprehend the underlying game logic, preventing them from extending the systems and ultimately leaving several placeholder mechanics in the final product. In the future, I should prioritize onboarding team members and writing detailed technical documentation over creating the systems entirely independently.</p>
+<p>Moreover, while the Card Creator was functionally robust, the accompanying shop system was largely scrapped because an interface was never finalized for it. Reallocating the time I invested in building the external tool toward directly developing the shop UI itself might have yielded a more complete final game.</p>
+<p>Overall, I am proud of my technical contributions, even though the final project did not reach the level of polish I originally aimed for. I performed my roles to the best of my ability and developed indispensable skills in data-driven architecture and multiplayer integration. Navigating the larger team dynamic also provided crucial lessons. Communication challenges occasionally left me uncertain about teammates' tasks, and I frequently had to assume unassigned responsibilities—such as proactively building the initial prototype—to prevent the project from stalling. These experiences have thoroughly prepared me for future collaborative development.</p>
+<hr>
+<h2 id="bibliography">Bibliography</h2>
+<p>Curve Animation (2024) <em>Liar's Bar</em>. [Video game]. PC: Curve Animation.</p>
+<p>Epic Games (2026) <em>Data-Driven Gameplay Elements</em>. Available at: https://dev.epicgames.com/documentation/en-us/unreal-engine/data-driven-gameplay-in-unreal-engine (Accessed: 19 April 2026).</p>
+<p>Epic Games (2026) <em>Unreal Engine 5</em>. [Software]. Available at: https://www.unrealengine.com/</p>
+<p>Git (2026) <em>Git</em>. [Software]. Available at: https://git-scm.com/</p>
+<p>Li, S., Zhao, Y. and Wang, X. (2024) 'Analysis of Bluffing by DQN and CFR in Leduc Hold'em Poker', <em>arXiv</em>, 2401.08522v1 [cs.GT]. Available at: https://arxiv.org/abs/2401.08522 (Accessed: 19 April 2026).</p>
+<p>Mermaid.js (2026) <em>Mermaid</em>. [Software]. Available at: https://mermaid.js.org/</p>
+<p>Outscal (2024) 'Effective Blueprint Communication and Maintenance in Unreal Engine'. <em>Outscal Blog</em>. Available at: https://outscal.com/blog/ (Accessed: 20 April 2026).</p>
+<p>Valve Corporation (2026) <em>Steam</em>. [Software/Service]. Available at: https://store.steampowered.com/about/</p>
+<hr>
+<h2 id="declared-assets">Declared Assets</h2>
+<ul>
+<li><strong>Unreal Engine 5:</strong> Primary game engine used for all gameplay systems, networking, and the Card Creator tool.</li>
+<li><strong>Steamworks SDK:</strong> Utilized for multiplayer session management and networking through the Steam Online Subsystem.</li>
+<li><strong>Mermaid.js:</strong> Used for the generation of all logic and system flowcharts within this documentation.</li>
+<li><strong>Git / GitHub:</strong> Primary version control and hosting services used for team collaboration and project management.</li>
+</ul>
+<blockquote>
+<p>These documents were modified with the use of Antigravity (Claude 4.6, Google Gemini 3 Flash):</p>
+<ul>
+<li><code>This Document</code> – proofreading, grammatical refinement, and structural and writing assistance.</li>
+<li><code>Flowcharts</code> – Mermaid.js code generation based on provided technical logic and player loops.</li>
+</ul>
+</blockquote>
+
+</body>
+</html>
