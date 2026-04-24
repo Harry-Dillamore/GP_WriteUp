@@ -63,6 +63,7 @@ graph TD
     GP -->|Apply Values| Player[Active Game Session]
     end
 ```
+*Figure 1: Proposed Production Data Pipeline for the Card Creator tool.*
 
 ## 7. Future Development: Cloud-Based Design Portal
 
@@ -81,5 +82,10 @@ To support remote work and rapid balancing, we propose a web-based extension of 
 | **Automated Compute** | $0 | $15 - $30 (Headless generation time) |
 | **Domain/API** | $15 | $0 |
 | **TOTAL** | **$15** | **$15 - $50** |
+
+---
+
+> **AI Declaration:**
+> This production proposal was drafted with technical assistance from Antigravity (Claude 4.6, Google Gemini 3 Flash). 
 
 ---

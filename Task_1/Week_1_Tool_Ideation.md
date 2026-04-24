@@ -29,3 +29,5 @@ Implementing this plan yields massive value to the development pipeline:
 - **Centralized Data & Uniform Execution:** Adding cards to a central array allows the core game manager to easily find and iterate over them. By enforcing the use of our Blueprint Interface, the core loop can trigger complex card abilities in the exact same way without bespoke hardcoding.
 - **Designer Autonomy:** Designers can use the tool to instantly generate, configure, and balance cards via a visual interface without taking away an engineer's time.
 - **Minimizes Git Conflicts:** Safely separating individual card data assets across the team allows multiple designers to work simultaneously without encountering production-blocking git conflicts on monolithic central files.
+
+> This documentation was modified with the use of Antigravity (Claude 4.6, Google gemini 3 flash)

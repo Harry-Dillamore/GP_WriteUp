@@ -1,18 +1,12 @@
 # Greedy Piggies Development Commentary
 
-**Unit Name:** [Insert Unit Name]
+**Unit Name:** FGCT5017 - Tools and Production
 
 **Student Name:** Harry Dillamore
 
 **Student ID:** 2402521
 
-**API Reference Link:** [URL]
-
-**User Guide Link:** [URL]
-
-**Build Link:** [URL or Embed]
-
-**Video Demonstration Link:** [URL or Embed]
+**Build Link:** [https://github.com/University-for-the-Creative-Arts/Greedy_Piggies/releases](https://github.com/University-for-the-Creative-Arts/Greedy_Piggies/releases)
 
 ---
 
@@ -20,7 +14,8 @@
 
 This commentary documents my contributions as a developer on _Greedy Piggies_, a multiplayer card game developed in Unreal Engine 5 (Epic Games, 2026) as part of a group project, with the goal of a commercial release on Steam (Valve Corporation, 2026). The game is a bluffing and betting card game for 2–4 players, in which each player places cards face-down, declares a score value, and then faces the risk of being audited by their opponents. If an auditor successfully catches a bluff, the active player loses their declared value; if the challenge fails, the auditor pays the penalty instead. Players also periodically visit a shop to purchase special ability cards, adding a strategic layer to the core loop. My primary responsibilities spanned the full backend of the game: designing and implementing this core gameplay loop, developing the turn and audit systems, integrating Steam-based multiplayer networking, and building a bespoke **Card Creator** tool to support the design pipeline. The Card Creator, implemented as an Editor Utility Widget, was specifically intended to reduce production bottlenecks by allowing designers to create and register special ability cards independently, without requiring direct programmer involvement. Underpinning all systems is a data-driven architecture using Unreal's Data Tables and Data Assets, which ensured clean version control and prevented merge conflicts as the team scaled. Whilst the final game did not reach the level of polish originally intended, the core systems—including the gameplay loop, data architecture, and multiplayer integration—functioned as designed and represent the primary focus of this write-up.
 
-![RACI Chart](assets/images/raci_chart.png)
+![RACI Chart](assets/images/raci_chart.png)  
+*Figure 1: Project RACI Chart showing developer responsibilities.*
 
 ---
 
@@ -119,16 +114,19 @@ graph TD
 
     CheckEnd -->|Yes| EndGame[Game Ends]
 ```
+*Figure 2: Core Gameplay Loop Flowchart (Prototype implementation).*
 
 To support this loop, I formatted the assets such that each player instantiation would create a distinct "Hand" object. This foundational object acts as a localized data container, storing the cards actively held by the player and their total running score. By centralizing this data into a specific object, the logic pipeline became much more robust and scalable. For instance, testing diverse character variants became a streamlined process; introducing a new character merely required assigning them a new Hand object, as the underlying architecture was already modular.
 
 Furthermore, I grouped logic using standard `Custom Event` nodes to manage adding and removing data from the Hand object. This was an essential design decision that provided team members an accessible interface to manipulate a player's hand state via standardized array execution paths (utilizing `Add` and `Remove Item` array nodes), without requiring them to parse or modify the underlying variable structures directly.
 
-![add to hand and remove from hand custom events](assets/images/bp_hand_custom_events.png)
+![add to hand and remove from hand custom events](assets/images/bp_hand_custom_events.png)  
+*Figure 3: Blueprint Custom Events for Hand Data manipulation.*
 
 This clean data access allowed me to rapidly implement simple AI opponents to facilitate loop testing. While incorporating AI was initially seen as a secondary task, we had identified that proper multiplayer implementation would take substantial time for the team to learn and integrate. Without AI, testing the gameplay would be stalled until the network architecture was finalized. By building rudimentary AI directly into the Dealer blueprint, we unblocked our rapid iterations, even though these AI routines were not intended for the final release.
 
-![logic for AI picking random cards in their hand to play](assets/images/ai_card_selection_logic.png)
+![logic for AI picking random cards in their hand to play](assets/images/ai_card_selection_logic.png)  
+*Figure 4: Algorithmic logic for AI card selection and bluff determination.*
 
 ### Dealer Actor Logic
 
@@ -169,10 +167,12 @@ graph TD
 
     NextTurn --> TurnStart
 ```
+*Figure 5: Authoritative Dealer Actor state machine logic.*
 
 #### Start Game
 
-![start game blueprints](assets/images/bp_start_game.png)
+![start game blueprints](assets/images/bp_start_game.png)  
+*Figure 6: Blueprint logic for session initialization and card distribution.*
 
 The sequence for initiating a game session dictates three critical paths:
 
@@ -199,10 +199,12 @@ graph TD
     ForLoop -- Completed --> Turn[Call Turn]
     end
 ```
+*Figure 7: Functional breakdown of the StartingDeal execution path.*
 
 #### Turn
 
-![turn blueprints](assets/images/bp_turn_logic.png)
+![turn blueprints](assets/images/bp_turn_logic.png)  
+*Figure 8: Unreal Engine Blueprint logic for the turn progression system.*
 
 The Turn system orchestrates the input polling pipeline and individual player progression step-by-step:
 
@@ -256,12 +258,14 @@ flowchart TD
     H -- "True" --> I([Auditor loses the declared value])
     H -- "False" --> J([Player loses the declared value])
 ```
+*Figure 9: The "Audit Conflict" game theory flowchart.*
 
 For testing the prototype, inputs and prompts were routed explicitly through localized `Print String` nodes combined with basic Key Event nodes mapping out "Y" or "N" decisions directly down the sequential player order. AI characters integrated into the prototype would procedurally resolve an audit determination via a `Random Integer in Range` node and evaluate the outcome securely via `Branch` logic checks before printing the choice to visually confirm functionality.
 
 The logic operates recursively: utilizing a `Sequence` execution node framework, it systematically asks each player their intent, relying on the input graph to poll their keyboard event before proceeding to the subsequent target. Should any single participant choose to initiate an audit, the query loop instantly breaks, blocking following players from further interface events (using a `Disable Input` node) and transitioning immediately into finalizing the audit math sequence. This recursive event-block system, despite not being perfectly optimized, was the most direct solution to actualize a playable proof-of-concept.
 
-![logic for asking each player for audit decision](assets/images/bp_audit_decision_logic.png)
+![logic for asking each player for audit decision](assets/images/bp_audit_decision_logic.png)  
+*Figure 10: Recursive audit polling logic for human and AI players.*
 
 ```mermaid
 flowchart TD
@@ -285,6 +289,7 @@ flowchart TD
 
     CheckPlayers -- "No" --> NoAudit([End Audit Phase: No one audited])
 ```
+*Figure 11: Algorithmic detail of the recursive audit loop.*
 
 ### Card Setup
 
@@ -292,7 +297,8 @@ In pursuit of data integrity, card configurations—such as values, suits, visua
 
 Therefore, actively dealt cards are handled strictly via corresponding integer indexes managed cleanly in a basic array. Whenever a system needs to identify graphic metadata or value strings, the script explicitly uses a `Get Data Table Row` node to query the Data Table securely. Utilizing a `Break` node on the output struct provides exact access to the desired fields, eliminating convoluted variable clusters holding assorted disparate data types.
 
-![card data table](assets/images/dt_card_data_table.png)
+![card data table](assets/images/dt_card_data_table.png)  
+*Figure 12: Unreal Engine Data Table (DT_Deck) structure for card metadata.*
 
 ### Score Calculation
 
@@ -300,7 +306,8 @@ Scores calculate directly against the real values queried from the static Data T
 
 The authoritative calculation must run comprehensively behind the scenes regardless of player intent; otherwise, validating an auditor's success rate would remain impossible safely verify.
 
-![play cards function](assets/images/bp_calculate_score.png)
+![play cards function](assets/images/bp_calculate_score.png)  
+*Figure 13: Technical implementation of the CalculateScore function and multipliers.*
 
 ```mermaid
 graph TD
@@ -329,6 +336,7 @@ graph TD
 
     Loop2 -- Completed --> Return([Return _score])
 ```
+*Figure 14: Logic flowchart for the scoring and combo multiplication system.*
 
 ### Multiplayer
 
@@ -343,7 +351,17 @@ To mitigate our mutual unfamiliarity with Unreal Engine's replication paradigms,
 
 ### Card Creator
 
-To assist designers in producing continuous creative output effortlessly, I developed the **Card Creator**, a technical production tool formatted directly as a proprietary Editor Utility Widget.
+To assist designers in producing continuous creative output effortlessly, I developed the **Card Creator**, a technical production tool formatted directly as a proprietary Editor Utility Widget. This tool was a cornerstone of our technical production strategy, intended to decouple gameplay design from core engineering and bypass the "programmer bottleneck" that often stalls balance iterations.
+
+![Card Creator UI](assets/images/image.png)  
+*Figure 15: The Card Creator Editor Utility Widget (EUW) interface.*
+
+The tool functions by taking form-based inputs—such as card name, rarity, and price—and programmatically triggering the `Construct Object from Class` node to generate a matching `UDataAsset`. 
+
+![Card Creator Logic](assets/images/image-3.png)  
+*Figure 16: Unreal Engine Blueprint logic governing automated asset generation.*
+
+These generated assets are automatically registered into the main card database and assigned a unique ID, ensuring they are immediately ready for use in the live game without any manual code entry.
 
 With this tool, a designer inputs statistical specifications explicitly on a form. Once submitted, the backend architecture automatically generates two corresponding artifacts seamlessly using Editor asset creation nodes: a strict Data Asset (using a `Construct Object from Class` node) dictating core traits, aligned explicitly with an overarching Shop arrays architecture, coupled precisely to an empty Blueprint class automatically instanced to house customized runtime abilities. Taking advantage of standardized Blueprint Interfaces implicitly defines an identical communication standard. Calling the respective interface message node links our universal action-dispatch arrays logically alongside unique, distinct implementations belonging individual cards, preventing systemic pipeline issues cleanly.
 
@@ -410,6 +428,6 @@ Valve Corporation (2026) _Steam_. [Software/Service]. Available at: https://stor
 - **Mermaid.js:** Used for the generation of all logic and system flowcharts within this documentation.
 - **Git / GitHub:** Primary version control and hosting services used for team collaboration and project management.
 
-> The following documentation was modified with the use of Antigravity (Claude 4.6, Google gemini 3 flash):
+> These documents were modified with the use of Antigravity (Claude 4.6, Google gemini 3 flash):
 > - `This Document` – proofreading, grammatical refinement, and structural and writing assistance.
 > - `Flowcharts` – Mermaid.js code generation based on provided technical logic and player loops.

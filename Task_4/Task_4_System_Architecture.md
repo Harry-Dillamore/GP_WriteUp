@@ -3,7 +3,7 @@
 this is the actor which is responsible for dealing cards to the players and handling the majority of the game logic, I chose to put the logic in a single authoritative actor to make it easier to manage and debug the game logic.
 
 - the logic is spit up into many custom events to make it easy trigger different parts of the game loop.
-- I attempted to migrate the logic to components to make it easier to involve more people working simultainiously, however, this was not so successful because I could not get people to consistantly work like this and since not enough people were activley working on the logic of the game, it was not worth the time investement.
+- I attempted to migrate the logic to components to make it easier to involve more people working simultaneously, however, this was not so successful because I could not get people to consistently work like this and since not enough people were actively working on the logic of the game, it was not worth the time investment.
 
 ```mermaid
 graph TD
@@ -36,10 +36,10 @@ graph TD
 
     NextTurn --> TurnStart
 ```
+*Figure 1: High-level System State Machine for the Dealer Actor.*
 
-## start game
-
-![alt text](start_game_blueprints.png)
+![Start Game Blueprints](../assets/images/bp_start_game.png)  
+*Figure 2: Implementation of the session initialization execution path.*
 
 This section manages the setup of the game, taking place across three main execution paths:
 
@@ -71,10 +71,10 @@ graph TD
     ForLoop -- Completed --> Turn[Call Turn]
     end
 ```
+*Figure 3: Detailed logic flow for the card distribution sequence.*
 
-## turn
-
-![alt text](turn_blueprints.png)
+![Turn Blueprints](../assets/images/bp_turn_logic.png)  
+*Figure 4: Input polling and turn-boundary management logic.*
 
 This section manages the individual player progression and handles the input polling at the start of a turn:
 
@@ -110,6 +110,7 @@ graph TD
     CheckCards -- False --> PrepInput[Set inputValue = false <br/> Update UI]
     PrepInput --> Prompt2[Print: 'write a value...']
 ```
+*Figure 5: Procedural flowchart for turn incrementation and input validation.*
 
 ## calculate score
 
@@ -163,3 +164,8 @@ graph TD
 
     Loop2 -- Completed --> Return([Return _score])
 ```
+*Figure 6: Data-driven scoring logic including combo multipliers.*
+
+---
+
+> This documentation was modified with the use of Antigravity (Claude 4.6, Google Gemini 3 Flash).
