@@ -76,6 +76,20 @@ This is the official technical standard provided by the creators of Unreal Engin
 
 ---
 
+#### Source 4: Industry Insight (Workflow & Maintenance)
+
+The Outscal technical blog addresses the specific friction points of large-team development, specifically regarding Blueprint maintenance.
+
+- **Modular Logic:** I analyzed the importance of "Blueprint Function Libraries" to ensure logic is reusable, preventing redundant code across the team.
+
+- **Conflict Mitigation:** The source highlights that because Blueprints are binary files, moving variable data into Data Assets is essential for parallel workflow.
+
+- **Encapsulation:** I learned that keeping logic "Private" within the state machine prevents accidental breaks by other developers.
+
+**Evaluation:** This source identifies the "human element"—how teams break projects. It provides a practical "Standard Operating Procedure" that ensures the codebase remains maintainable.
+
+---
+
 ## Implementation _(Approx. 30–40% | ~600–800 words)_
 
 ### What was your development process and how did decisions evolve?

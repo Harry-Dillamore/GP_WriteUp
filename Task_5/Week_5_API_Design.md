@@ -1,84 +1,98 @@
-# Week 5 - Public-Facing API Design
+# Week 5 – API Design: Card Creator EUW
 
-## Selected Feature: GameAnalytics Telemetry Validation Service (REST API)
+## Selected Tool
 
-As explored in the Week 3 Security Evaluation, allowing the Unreal Engine client to send unverified telemetry directly to GameAnalytics exposes our metrics to spoofing. To resolve this, I implemented a **Custom Authoritative Telemetry Proxy** as an external **RESTful Web Service**. The Unreal Engine client sends data to this API, which validates the mathematical possibility of the events before securely forwarding them to the official GameAnalytics dashboard.
+**`EUW_CardCreator`** is an Editor Utility Widget that allows designers to create and register shop cards without programmer involvement. A designer fills in a form and clicks a button; the tool creates a `BP_CardAsset`, populates it with data via the `S_CardData` struct, and registers it in `BP_CardDatabase.AllCards`.
 
----
+## What is an API?
 
-## 1. API Surface & Endpoints
+An **API** is a defined contract specifying what inputs are accepted, what processing occurs, and what output the caller can expect. As Masse (2011) defines it, an API is *"a set of rules that a developer must follow to access a service."* It does not have to be a web endpoint or code library — any consistent input/output contract qualifies.
 
-### Endpoint: `POST /api/v1/telemetry/design-event`
-**Description:** Captures standard gameplay events (like a specific card being played or a match ending) and validates them to prevent spam/spoofing.
-**Parameters (JSON Body):**
-- `player_id` (String, Required) - The unique UUID of the reporting player.
-- `event_id` (String, Required) - The hierarchical GameAnalytics event string (e.g., `CardPlayed:Fireball:Win`).
-- `match_id` (String, Required) - The active match session ID used to verify the event is occurring within an actual server instance.
-- `value` (Float, Optional) - An optional numerical value attached to the event (e.g., damage dealt).
-
-**Return Data / Outputs (JSON):**
-- `status` (String) - Returns `"success"` or `"error"`.
-- `forwarded` (Boolean) - `true` if the server deemed the event mathematically legitimate and securely forwarded it to GameAnalytics.
-
-**Errors / Failure Cases:**
-- `400 Bad Request` - Missing required parameters or an invalid JSON structure.
-- `403 Forbidden` - The `match_id` does not correlate to an active, registered server instance.
-- `429 Too Many Requests` - The client is attempting to fire events faster than mathematically possible in the normal game loop (Rate Limit / Anti-Cheat triggered).
+`EUW_CardCreator` is a **designer-facing API**: the form fields are its inputs, `BP_CardAsset` creation is its processing, and the registered asset is its output. Following Jacobson et al. (2011), the implementation (AssetTools, struct population, database registration) is hidden behind a simple interface the designer never needs to understand.
 
 ---
 
-### Endpoint: `POST /api/v1/telemetry/economy-event`
-**Description:** Tracks virtual currency (VC) fluctuations. This node validates that currency added or subtracted strictly matches verified server-side match outcomes.
-**Parameters (JSON Body):**
-- `player_id` (String, Required) - The unique UUID of the player.
-- `currency_type` (String, Required) - The string identifier of the currency (e.g., `GoldCoins`).
-- `transaction_type` (Enum: `Source` | `Sink`, Required) - Whether the currency was earned (`Source`) or spent (`Sink`).
-- `amount` (Integer, Required) - The exact amount of currency exchanged.
-- `item_id` (String, Required) - What the currency was physically spent on or earned from (e.g., `MatchWin_Bonus` or `Shop_EpicCard`).
+## Data Types
 
-**Return Data / Outputs (JSON):**
-- `status` (String) - Returns `"success"` or `"error"`.
-- `validated_balance` (Integer) - The authoritative balance tracked internally by the server cache after the event.
+**`S_CardData`** – struct used to populate each new `BP_CardAsset`:
 
-**Errors / Failure Cases:**
-- `400 Bad Request` - Missing parameters.
-- `409 Conflict` - The client claims to have earned an `amount` that is impossible for the specified `item_id` (e.g., claiming 1,000,000 coins from a standard match).
+| Field | Type | Source |
+|---|---|---|
+| `Name` | `String` | `InputName` |
+| `Description` | `Text` | `InputDescription` |
+| `Price` | `Integer` | `InputPrice` (float, truncated via `FTrunc`) |
+| `Rarity` | `E_CardRarity` | `InputRarity` → `EnumRarity` |
+| `CardArt` | Texture reference | — |
+| `AbilityClass` | Class reference | — |
+| `IsPassive` | `Boolean` | — |
+
+**`E_CardRarity`** – enum values matching the `InputRarity` combo box options: `Common`, `Uncommon`, `Rare`, `Epic`.
 
 ---
 
-## 2. Usage Example: REST Call Flow
+## Input Widgets
 
-Below is a minimal HTTP example demonstrating how the Unreal Engine client natively communicates with our REST validation proxy when a player legitimately spends in-game currency on a shop card.
+| Variable | Type | Required | Description |
+|---|---|---|---|
+| `InputName` | `EditorUtilityEditableText` | ✅ Required | Card name; also used to form the asset filename (`"BP_" + InputName`). Empty value creates a nameless asset |
+| `InputDescription` | `EditorUtilityMultiLineEditableText` | Optional | Card description; stored as empty Text if left blank |
+| `InputPrice` | `EditorUtilitySpinBox` | Optional | Shop cost, truncated to integer; defaults to `0` if not set |
+| `InputRarity` | `EditorUtilityComboBoxString` | ✅ Required | Rarity dropdown; must match `Common`, `Uncommon`, `Rare`, or `Epic`. Unrecognised value leaves `EnumRarity` unchanged |
 
-**Request (from Unreal Engine Client):**
-```http
-POST /api/v1/telemetry/economy-event HTTP/1.1
-Host: telemetry.greedypiggies.io
-Authorization: Bearer <session_auth_token>
-Content-Type: application/json
+---
 
-{
-  "player_id": "usr_8f92j1k1",
-  "currency_type": "GoldCoins",
-  "transaction_type": "Sink",
-  "amount": 25000,
-  "item_id": "Shop_Purchase_Card_Peek"
-}
+## Primary Action – `BtnCreateCard` (OnClicked)
+
+All widget values are read at click-time. No explicit parameters are passed.
+
+**Execution:**
+1. `AssetTools.CreateAsset(AssetName: "BP_" + InputName, PackagePath: "/Game/PrototypeBlueprints/CardCreator/", AssetClass: BP_CardAsset)` → stored in `NewDataObject`
+2. Cast to `BP_CardAsset` — failure triggers `ShowMessage("Failed")` and stops execution
+3. `InputRarity.GetSelectedOption()` routed through `Switch on String` → sets `EnumRarity`
+4. `SetFieldsInStruct` populates `S_CardData` from all inputs
+5. Struct assigned to the new `BP_CardAsset`
+6. Asset appended to `DataBase.AllCards` via `Array_Add`
+7. `ShowMessage("Total number of cards", <new count>)` confirms success
+
+**Outputs:**
+
+| Output | Description |
+|---|---|
+| `BP_CardAsset` on disk | Saved to `/Game/PrototypeBlueprints/CardCreator/BP_<InputName>` |
+| `DataBase.AllCards` | New asset appended to the card registry |
+
+**Failure Cases:**
+
+| Condition | Behaviour |
+|---|---|
+| `CreateAsset` returns null | `ShowMessage("Failed")` shown; nothing registered |
+| `InputName` is empty | Asset created as `"BP_"` only; naming conflict likely |
+| Unrecognised rarity selection | `Switch on String` hits default; `EnumRarity` unchanged |
+| `DataBase` is null | `Array_Add` silently fails; asset not registered |
+
+---
+
+## Usage Example
+
+```
+InputName:        "Shield"
+InputDescription: "Blocks the next audit against you."
+InputPrice:       5000
+InputRarity:      "Rare"
+
+[BtnCreateCard clicked]
+  → CreateAsset → "BP_Shield" at /Game/PrototypeBlueprints/CardCreator/
+  → Cast to BP_CardAsset
+  → Switch on String "Rare" → EnumRarity = Rare
+  → SetFieldsInStruct → S_CardData { Name="Shield", Price=5000, Rarity=Rare, ... }
+  → Array_Add → DataBase.AllCards
+  → ShowMessage: "Total number of cards / 12"
 ```
 
-**Response (from Validation Server):**
-```http
-HTTP/1.1 200 OK
-Content-Type: application/json
+---
 
-{
-  "status": "success",
-  "message": "Economy event validated and safely forwarded to GameAnalytics.",
-  "data": {
-    "forwarded": true,
-    "validated_balance": 180000
-  }
-}
-```
+## Bibliography
 
-By placing this robust REST API logically between the game client and the third-party GameAnalytics service, we effectively sanitize our data lake, preventing malicious users from ruining the critical economic balancing metrics of *Greedy Piggies*.
+Jacobson, D., Brail, G. and Woods, D. (2011). *APIs: A Strategy Guide*. Sebastopol, CA: O'Reilly Media.
+
+Masse, M. (2011). *REST API Design Rulebook*. Sebastopol, CA: O'Reilly Media.

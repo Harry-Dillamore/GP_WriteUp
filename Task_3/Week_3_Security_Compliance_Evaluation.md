@@ -1,93 +1,65 @@
-# Week 3 - Security, Compliance, and Networking Evaluation
+# Week 3 – Security & Compliance Evaluation: Card Creator Tool
 
-## Tool Selection 1: GameAnalytics SDK Integration
+## Selected Tool
 
-For this evaluation, we are analyzing the **GameAnalytics SDK Integration** proposed in Week 1. This tool is designed to collect in-game telemetry and economy data to aid in player balancing. Because it interfaces directly with external servers to transmit player behaviors and potentially Personally Identifiable Information (PII), it carries substantial networking, security, and compliance risks.
-
----
-
-## 1. Identification of Potential Risks
-
-**Could the tool transmit data over a network?**
-Yes. The SDK continuously captures discrete gameplay events and pushes them over the internet to the GameAnalytics cloud servers at regular intervals.
-
-**Could it expose sensitive project or player data?**
-Yes. If misconfigured or intercepted, the transmitted data could expose:
-- **Player Data:** IP addresses, platform hardware IDs, geographic locations, and session durations (PII).
-- **Project Data:** Unreleased economic balancing metrics, shop transaction volumes, or proprietary game meta-analysis.
-
-**Could it be exploited or manipulated?**
-**Telemetry Spoofing** is a major risk. External attackers or malicious players could decompile the game client, intercept the telemetry endpoints, and write scripts to flood the servers with fake data (e.g., repeatedly firing an event that says *Card X* was played and lost). 
-
-**What happens if it is compromised?**
-- **Internal Misuse / Misconfiguration:** A developer might accidentally push an update that tracks sensitive details (like chat logs), massively violating privacy laws.
-- **External Attackers:** Flooding the system with spoofed data destroys the integrity of the analytics, leading developers to make incorrect game balancing decisions based on corrupted metrics.
-- **Data Leakage:** If the transit isn't secured or the API keys are leaked in the source code, attackers could scrape data or weaponize the telemetry pipeline, resulting in severe GDPR non-compliance fines.
+The **Card Creation & Management Editor Utility Widget (EUW)** is a local Unreal Engine tool that generates `.uasset` Data Assets, assigns Blueprint Interfaces, and registers cards to a centralised array. It runs entirely locally; its only network interaction is indirect — generated assets are pushed to a public GitHub repository.
 
 ---
 
-## 2. Proposed Mitigations
+## 1. Threat Identification
 
-To secure the GameAnalytics pipeline against the threats of eavesdropping, spoofing, and data leakage, the following technical measures must be enforced:
+**Network transmission.** The tool makes no direct network calls, but every `.uasset` it generates is committed to a public repository. Card stats, ability parameters, and balance values are therefore permanently visible by design. Any credentials accidentally committed alongside assets are immediately readable — automated bots scrape public repositories continuously, so exposure should be treated as instant (GitGuardian, 2024).
 
-- **Protocol Choice (HTTPS):** All outgoing telemetry must be strictly forced through **HTTPS (TLS 1.2 or higher)**. Unencrypted HTTP is unacceptable, as it leaves player data vulnerable to man-in-the-middle (MitM) attacks.
-- **Encryption Required:** Data in transit must be secured via TLS. Additionally, sensitive analytics data stored locally in a device buffer before transmission should be obfuscated so players cannot easily read their memory dumps.
-- **Authentication Method (HMAC Signatures):** To prevent telemetry spoofing, the client must use **HMAC (Hash-based Message Authentication Code)** using a private secret key. The server rejects any payload where the cryptographic signature does not match the content, rendering trivial bot-flooding useless.
-- **Access Control:** The GameAnalytics web dashboard must enforce **Role-Based Access Control (RBAC)**. Game designers should only have read access to aggregated statistics. Only the Data Protection Officer (DPO) and Lead Admin can access raw user histories to process Data Subject Access Requests (DSARs).
-- **Logging and Auditing:** Enable audit logs on the dashboard to track whenever internal team members access sensitive player profiles, preventing internal abuse.
-- **Data Minimisation (GDPR principle):** Enable the SDK’s "IP Anonymization" feature. This scrambles the final octets of a player's IP address client-side before processing, aggregating players regionally rather than mathematically pinpointing individual households. 
+**Sensitive data exposure.** No player data is processed, so no direct GDPR liability exists. However, card stats and ability parameters represent commercial IP; leakage of pre-launch data could harm the product's competitive novelty.
 
----
+**Asset manipulation.** `.uasset` files are binary and opaque to standard diff tools, meaning a poisoned asset — one with illegal stat values or a corrupted array reference — can merge undetected. This matches the supply-chain attack pattern where trusted binary artifacts are compromised before integration (Twingate, 2024). Separately, if the EUW's Blueprint graph were tampered with, malicious logic could execute silently during normal designer use.
 
-## 3. Networking and Architecture Considerations (Local vs. Networked)
-
-*While the GameAnalytics tool fundamentally operates over a network, we must evaluate if the current implementation (client-directly-to-analytics-server) is the most secure architecture.*
-
-**Would a dedicated authoritative service reduce risk?**
-Currently, the Unreal Engine client talks directly to the GameAnalytics REST API. This exposes the GameAnalytics integration keys inside the shipped client. 
-- **Centralised Validation:** To improve trust, the architecture could be restructured into a true **Client–Server model** utilizing an authoritative dedicated backend. Instead of the game client talking directly to GameAnalytics, the client would send secure verification packets securely to our own custom backend server.
-- **Authoritative Service:** The custom backend would validate the telemetry against the active game session (e.g., "Could the player have legitimately cast this spell 5 times in 10 seconds?"). If the parameters are mathematically impossible, the server drops the malformed packet. Only legitimate, server-validated data is then forwarded from the backend to the data lake, completely hiding the API keys from the public client.
-
-**Explain whether networking adds value or unnecessary complexity?**
-Introducing an intermediary authoritative server **adds immense security value** for competitive, high-stakes games where data integrity must be 100% accurate. However, for a smaller production relying on out-of-the-box Unreal plugins, building and maintaining a custom validating telemetry firewall introduces **unnecessary complexity**. For *Greedy Piggies*, utilizing the built-in plugin with strict HMAC authentication, HTTPS, and diligent data minimisation policies is the optimal balance of security and engineering effort.
+| Threat                               | Impact                                                     |
+| ------------------------------------ | ---------------------------------------------------------- |
+| Credentials committed to public repo | Immediately exposed; history rewrite required to remediate |
+| Poisoned `.uasset` merged            | Corrupted card data enters production build                |
+| Central array overwritten            | All card references lost                                   |
+| EUW Blueprint tampered               | Silent malicious execution in editor                       |
 
 ---
 
-## Tool Selection 2: Card Creator (Editor Utility Widget)
+## 2. Threat Consideration
 
-While our analytics tool operates primarily over a network, the **Card Creator EUW** is built to operate locally on developers' machines. Evaluating this tool highlights the internal security and risk considerations for a local production pipeline.
+**Internal misuse** is the most likely vector. A designer could input out-of-range values, delete array entries, or commit a binary-conflicted asset — all without any enforcement layer currently in place.
 
-### 1. Identification of Potential Risks
+**External attackers** could gain write access via compromised contributor credentials, allowing them to push poisoned assets or tamper with CI configuration.
 
-**Could the tool transmit data over a network?**
-By default, the tool only saves `.uasset` files locally to the user's disk. Data is only transmitted over the network when a developer commits and pushes those new files to the shared version control repository.
+**Misconfiguration.** Unreal Engine config files (e.g., `DefaultEngine.ini` overrides, plugin tokens) can be unintentionally tracked by Git and committed alongside card assets. GitGuardian (2024) found that 4.6% of active repositories leaked at least one secret, and over 90% remained valid five days after exposure — a significant risk given the repository is already public.
 
-**Could it expose sensitive project or player data?**
-It does not expose PII or player data. However, it handles **Project Data**, specifically unreleased game mechanics, character abilities, and upcoming cards. A leak reveals the unreleased project roadmap.
+**Data leakage** can also occur informally; screenshots of the EUW interface may reveal unannounced card names or stats without any repository breach.
 
-**Could it be exploited or manipulated?**
-**Internal Misuse / Misconfiguration:** A designer could accidentally bypass intended balancing parameters (e.g., giving a card 9999 attack damage) because the local tool lacks authoritative limits.
-**Data Leakage:** If the repository access is compromised externally via stolen credentials, the local `.uasset` parameter arrays are exposed to attackers.
+---
 
-**What happens if it is compromised?**
-A compromised or misconfigured card pushed to the main branch could crash the game loop for the whole team, break the automatic build pipeline, or lead to accidentally shipping severely unbalanced elements to players.
+## 3. Mitigations
 
-### 2. Proposed Mitigations
+**Asset integrity.** The EUW should write a plaintext **`.json` manifest** alongside each generated asset, logging the creator, timestamp, and a hash of key parameters. This provides a text-diffable audit trail that compensates for the binary opacity of `.uasset` files. **Git LFS** should be enabled to prevent partial binary corruption on merge.
 
-- **Access Control:** Enforce strict **Role-Based Access Control (RBAC)** on the version control repository. Developers can only push to individual feature branches.
-- **Protocol Choice:** All version control network traffic (pushing/pulling) must use the **SSH** protocol or **HTTPS** secured with TLS. 
-- **Encryption Required:** Dev machines must utilize Full Disk Encryption (e.g., BitLocker) to secure local assets in the event hardware is stolen.
-- **Authentication Method:** Require **Multi-Factor Authentication (MFA)** for all GitHub/Perforce accounts on the team to prevent credential scraping.
-- **Logging and Auditing:** Rely on the Git commit history and pull request logs to audit exactly who authored and modified specific special ability cards.
-- **Data Minimisation:** Ensure the EUW script only writes necessary card parameters into the `.uasset` and strips out any underlying workstation metadata (like local Windows usernames or explicit IP configurations).
+**CI validation.** A CI pipeline should run a headless Unreal commandlet on every commit touching a card asset, verifying fields are present and stats are within legal ranges. This enforces card validity at the pipeline level — directly addressing the risk that binary assets bypass human review.
 
-### 3. Networking Additions (Improving a Local Tool)
+**Credential hygiene.** The `.gitignore` must exclude Unreal config directories (`Saved/`, `Intermediate/`, `.ini` overrides) to prevent tokens being committed alongside card assets. GitHub's **push protection** should be enabled to block credential commits before they reach the public remote.
 
-*The Card Creator currently operates locally as a standalone widget. How could networking improve it?*
+**Access control.** The **principle of least privilege** (NIST SP 800-53, 2020) should be applied: contributors only receive write access to the directories relevant to their role, limiting the blast radius of both accidental and deliberate asset corruption.
 
-**How could networking improve it?**
-- **Centralised Validation:** Moving from a purely local script to a **Client–Server model** would significantly improve trust in the data. When a designer hits "Create Card" in the EUW, the widget could send an HTTP payload to an internal, authoritative service. This internal server cross-references the requested card stats against current algorithmic balance margins and approves or rejects the creation.
-- **Version Control Integration:** Networking could automate the deployment process. Upon creating a valid card, an API call could trigger a continuous integration bot to automatically draft a pull request and notify the team on a shared dashboard.
+**GDPR.** The tool currently processes no personal data, so the **data minimisation principle** (UK GDPR, Article 5(1)(c); ICO, 2021) does not yet apply — but must be considered if the tool is extended to log activity or connect to an external service.
 
-**Does networking add value or unnecessary complexity?**
-For a small indie team, building a dedicated authoritative validation server for an internal tool adds **unnecessary complexity**. Standard Git hooks and manual pull request approvals are sufficient to evaluate local `.uasset` data. However, for a massive live-service studio where hundreds of cards are made weekly, offloading validation to a centralised network dashboard adds tremendous value by programmatically ensuring build stability and preventing overpowered parameters from entering the final pipeline.
+---
+
+## 4. Networking Consideration
+
+Currently, networking would add unnecessary complexity. The core risks — binary asset opacity, credential leakage, and undetected tampering — are addressable within the existing local-plus-Git workflow.
+
+The **CI validation pipeline** is the one networking enhancement with clear justification. It delivers the primary benefit of a client–server trust model — authoritative enforcement of card validity — using existing infrastructure. A dedicated HTTPS validation endpoint would offer stronger enforcement at scale, but is disproportionate for this team size. The CI pipeline achieves the same outcome at negligible overhead.
+
+---
+
+## References
+
+- GitGuardian (2024) _State of Secrets Sprawl 2024_. Available at: https://www.gitguardian.com/state-of-secrets-sprawl-report-2024 (Accessed: 22 April 2026).
+- ICO (2021) _Data minimisation_. Information Commissioner's Office. Available at: https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/data-protection-principles/a-guide-to-the-data-protection-principles/the-principles/data-minimisation/ (Accessed: 22 April 2026).
+- NIST (2020) _Security and Privacy Controls for Information Systems and Organisations_, SP 800-53 Rev. 5. Available at: https://doi.org/10.6028/NIST.SP.800-53r5 (Accessed: 22 April 2026).
+- Twingate (2024) _What is a Supply Chain Attack?_ Available at: https://www.twingate.com/blog/glossary/supply-chain-attack (Accessed: 22 April 2026).
