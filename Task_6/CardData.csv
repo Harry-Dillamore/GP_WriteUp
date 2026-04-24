@@ -1,0 +1,24 @@
+Card_Name,Tier,Cost,Purchase_Count,Avg_Player_Balance_At_Purchase,Audit_Success_Rate,Bankruptcy_Prevention_Rate,Win_Rate,Avg_Turns_Held
+Emergency Bailout,Common,5000,1420,-18450,0.31,0.12,0.08,1.2
+Offshore Account,Common,10000,980,22300,0.48,0.45,0.42,12.4
+Pocket Money,Common,5000,1150,12100,0.44,0.30,0.36,1.0
+House Arrest,Common,10000,740,31000,0.52,0.22,0.39,1.0
+Market Rumours,Common,5000,1850,14500,0.78,0.35,0.41,1.0
+Finder's Fee,Common,10000,620,28900,0.61,0.28,0.49,4.5
+Sure Thing,Common,5000,1310,9400,0.39,0.25,0.31,1.0
+Voice of Command,Rare,25000,410,48200,0.66,0.55,0.58,1.0
+The Landlord,Rare,20000,530,52100,0.55,0.15,0.64,3.0
+Hostile Takeover,Rare,3000,610,58400,0.58,0.18,0.61,1.0
+Pyramid Scheme,Rare,30000,320,41200,0.45,0.10,0.44,3.0
+Lucky Draw,Rare,30000,380,62000,0.50,0.20,0.52,15.0
+Daddy's Allowance,Epic,35000,480,92300,0.54,0.68,0.75,10.8
+Corporate Espionage,Epic,50000,215,115000,0.92,0.75,0.82,14.2
+Found Truffles,Epic,50000,195,102400,0.44,0.30,0.68,2.0
+Miscalculation,Epic,50000,140,88600,0.41,0.15,0.38,1.0
+Adeptus Piganicius,Epic,75000,95,145000,0.35,0.05,0.88,1.0
+Hyperinflation,Epic,40000,280,72100,0.42,0.12,0.29,1.0
+Bailout Bonds,Common,8000,950,-22000,0.30,0.25,0.15,8.0
+Whistleblower,Rare,22000,510,45000,0.95,0.12,0.55,1.0
+Tax Haven,Epic,45000,280,120000,0.40,0.85,0.72,18.0
+Golden Parachute,Epic,60000,150,15000,0.20,0.90,0.40,5.0
+Market Crash,Rare,35000,420,65000,0.50,0.10,0.58,1.0

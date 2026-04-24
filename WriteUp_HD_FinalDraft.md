@@ -6,8 +6,6 @@
 
 **Student ID:** 2402521
 
-**Total Word Count:** [XXXX] _(Assuming ~2000 words for the targets below)_
-
 **API Reference Link:** [URL]
 
 **User Guide Link:** [URL]
@@ -20,9 +18,9 @@
 
 ## Abstract
 
-This commentary documents my contributions as a developer on _Greedy Piggies_, a multiplayer card game developed in Unreal Engine 5 as part of a group project, with the goal of a commercial release on Steam. The game is a bluffing and betting card game for 2–4 players, in which each player places cards face-down, declares a score value, and then faces the risk of being audited by their opponents. If an auditor successfully catches a bluff, the active player loses their declared value; if the challenge fails, the auditor pays the penalty instead. Players also periodically visit a shop to purchase special ability cards, adding a strategic layer to the core loop. My primary responsibilities spanned the full backend of the game: designing and implementing this core gameplay loop, developing the turn and audit systems, integrating Steam-based multiplayer networking, and building a bespoke **Card Creator** tool to support the design pipeline. The Card Creator, implemented as an Editor Utility Widget, was specifically intended to reduce production bottlenecks by allowing designers to create and register special ability cards independently, without requiring direct programmer involvement. Underpinning all systems is a data-driven architecture using Unreal's Data Tables and Data Assets, which ensured clean version control and prevented merge conflicts as the team scaled. Whilst the final game did not reach the level of polish originally intended, the core systems—including the gameplay loop, data architecture, and multiplayer integration—functioned as designed and represent the primary focus of this write-up.
+This commentary documents my contributions as a developer on _Greedy Piggies_, a multiplayer card game developed in Unreal Engine 5 (Epic Games, 2026) as part of a group project, with the goal of a commercial release on Steam (Valve Corporation, 2026). The game is a bluffing and betting card game for 2–4 players, in which each player places cards face-down, declares a score value, and then faces the risk of being audited by their opponents. If an auditor successfully catches a bluff, the active player loses their declared value; if the challenge fails, the auditor pays the penalty instead. Players also periodically visit a shop to purchase special ability cards, adding a strategic layer to the core loop. My primary responsibilities spanned the full backend of the game: designing and implementing this core gameplay loop, developing the turn and audit systems, integrating Steam-based multiplayer networking, and building a bespoke **Card Creator** tool to support the design pipeline. The Card Creator, implemented as an Editor Utility Widget, was specifically intended to reduce production bottlenecks by allowing designers to create and register special ability cards independently, without requiring direct programmer involvement. Underpinning all systems is a data-driven architecture using Unreal's Data Tables and Data Assets, which ensured clean version control and prevented merge conflicts as the team scaled. Whilst the final game did not reach the level of polish originally intended, the core systems—including the gameplay loop, data architecture, and multiplayer integration—functioned as designed and represent the primary focus of this write-up.
 
-![RACI Chart](raci_chart.png)
+![RACI Chart](assets/images/raci_chart.png)
 
 ---
 
@@ -38,7 +36,7 @@ My research validates the **interdependence of technical stability and player ps
 
 #### Source 1: Academic (Game Theory)
 
-Li, Zhao, and Wang’s study on **imperfect-information games** is highly relevant as it mathematically defines why "bluffing" is a structural necessity to prevent a "solved" (and boring) meta.
+Li, Zhao, and Wang’s (2024) study on **imperfect-information games** is highly relevant as it mathematically defines why "bluffing" is a structural necessity to prevent a "solved" (and boring) meta.
 
 - **Strategic Unpredictability:** I learned that without an audit mechanic, games become "exploitable," where players with the best cards always win.
 - **Information Asymmetry:** The paper's "Bayesian probabilistic model" informed my UI—giving players enough info for a "calculated" audit.
@@ -50,7 +48,7 @@ Li, Zhao, and Wang’s study on **imperfect-information games** is highly releva
 
 #### Source 2: Game Source (Case Study)
 
-_Liar’s Bar_ mirrors the core "Audit" and "Betting" mechanics of my project. Analyzing its success provides a blueprint for how state machines facilitate complex human interaction.
+_Liar’s Bar_ (Curve Animation, 2024) mirrors the core "Audit" and "Betting" mechanics of my project. Analyzing its success provides a blueprint for how state machines facilitate complex human interaction.
 
 - **State Machine Transitions:** I analyzed the transition between "Card Play" and "Reaction." _Liar's Bar_ uses forced delays to build tension, which I replicated in my loop.
 - **Visual Feedback:** The game uses high-stakes animations to signal a round's end, teaching me that the "Audit" requires a distinct "Reveal Phase."
@@ -62,9 +60,9 @@ _Liar’s Bar_ mirrors the core "Audit" and "Betting" mechanics of my project. A
 
 #### Source 3: Technical Documentation
 
-This is the official technical standard provided by the creators of Unreal Engine. It details the intended use of `UDataAsset`, `FStruct`, and `UDataTable`.
+This is the official technical standard (Epic Games, 2026) provided by the creators of Unreal Engine. It details the intended use of `UDataAsset`, `FStruct`, and `UDataTable`.
 
-- **Decoupling:** The documentation confirms that moving card stats into **Data Assets** is the "correct" way to prevent Git merge conflicts.
+- **Decoupling:** The documentation confirms that moving card stats into **Data Assets** is the "correct" way to prevent Git (2026) merge conflicts.
 - **Efficiency:** I learned how `UDataAsset` handles asynchronous loading, ensuring performance remains stable as the library scales.
 - **Tooling:** This provided the API references needed to build the **Card Creator** tool using Editor Utility Widgets.
 
@@ -74,7 +72,7 @@ This is the official technical standard provided by the creators of Unreal Engin
 
 #### Source 4: Industry Insight (Workflow & Maintenance)
 
-The Outscal technical blog addresses the specific friction points of large-team development, specifically regarding Blueprint maintenance.
+The Outscal (2024) technical blog addresses the specific friction points of large-team development, specifically regarding Blueprint maintenance.
 
 - **Modular Logic:** I analyzed the importance of "Blueprint Function Libraries" to ensure logic is reusable, preventing redundant code across the team.
 
@@ -92,7 +90,7 @@ The Outscal technical blog addresses the specific friction points of large-team 
 
 During the initial prototyping phase, the primary focus was on establishing a functional version of the game loop. To achieve this quickly, I utilized barebones visuals and inputs, allowing the team to test the core mechanics without being hindered by polished art or complex UI.
 
-The core flow of this loop is detailed in the flowchart below:
+The core flow of this loop is detailed in the flowchart below (Mermaid.js, 2026):
 
 ```mermaid
 graph TD
@@ -126,11 +124,11 @@ To support this loop, I formatted the assets such that each player instantiation
 
 Furthermore, I grouped logic using standard `Custom Event` nodes to manage adding and removing data from the Hand object. This was an essential design decision that provided team members an accessible interface to manipulate a player's hand state via standardized array execution paths (utilizing `Add` and `Remove Item` array nodes), without requiring them to parse or modify the underlying variable structures directly.
 
-![add to hand and remove from hand custom events](bp_hand_custom_events.png)
+![add to hand and remove from hand custom events](assets/images/bp_hand_custom_events.png)
 
 This clean data access allowed me to rapidly implement simple AI opponents to facilitate loop testing. While incorporating AI was initially seen as a secondary task, we had identified that proper multiplayer implementation would take substantial time for the team to learn and integrate. Without AI, testing the gameplay would be stalled until the network architecture was finalized. By building rudimentary AI directly into the Dealer blueprint, we unblocked our rapid iterations, even though these AI routines were not intended for the final release.
 
-![logic for AI picking random cards in their hand to play](ai_card_selection_logic.png)
+![logic for AI picking random cards in their hand to play](assets/images/ai_card_selection_logic.png)
 
 ### Dealer Actor Logic
 
@@ -158,11 +156,11 @@ graph TD
     AuditPhase -->|Audited| AuditLogic{"Did the player lie?"}
     AuditPhase -->|Not Audited| ApplyValues["Apply Declared Score"]
 
-    AuditLogic -->|Yes - Auditor Wins| PlayerLosedVal["Current player loses declared value"]
-    AuditLogic -->|No - Player Wins| AuditorLosedVal["Auditor loses declared value"]
+    AuditLogic -->|Yes - Auditor Wins| PlayerLostVal["Current player loses declared value"]
+    AuditLogic -->|No - Player Wins| AuditorLostVal["Auditor loses declared value"]
 
-    PlayerLosedVal --> Score["Update Scores"]
-    AuditorLosedVal --> Score
+    PlayerLostVal --> Score["Update Scores"]
+    AuditorLostVal --> Score
     ApplyValues --> Score
 
     Score --> CheckState{"Check Win/Loss Conditions"}
@@ -174,7 +172,7 @@ graph TD
 
 #### Start Game
 
-![start game blueprints](bp_start_game.png)
+![start game blueprints](assets/images/bp_start_game.png)
 
 The sequence for initiating a game session dictates three critical paths:
 
@@ -204,7 +202,7 @@ graph TD
 
 #### Turn
 
-![turn blueprints](bp_turn_logic.png)
+![turn blueprints](assets/images/bp_turn_logic.png)
 
 The Turn system orchestrates the input polling pipeline and individual player progression step-by-step:
 
@@ -263,7 +261,7 @@ For testing the prototype, inputs and prompts were routed explicitly through loc
 
 The logic operates recursively: utilizing a `Sequence` execution node framework, it systematically asks each player their intent, relying on the input graph to poll their keyboard event before proceeding to the subsequent target. Should any single participant choose to initiate an audit, the query loop instantly breaks, blocking following players from further interface events (using a `Disable Input` node) and transitioning immediately into finalizing the audit math sequence. This recursive event-block system, despite not being perfectly optimized, was the most direct solution to actualize a playable proof-of-concept.
 
-![logic for asking each player for audit decision](bp_audit_decision_logic.png)
+![logic for asking each player for audit decision](assets/images/bp_audit_decision_logic.png)
 
 ```mermaid
 flowchart TD
@@ -294,7 +292,7 @@ In pursuit of data integrity, card configurations—such as values, suits, visua
 
 Therefore, actively dealt cards are handled strictly via corresponding integer indexes managed cleanly in a basic array. Whenever a system needs to identify graphic metadata or value strings, the script explicitly uses a `Get Data Table Row` node to query the Data Table securely. Utilizing a `Break` node on the output struct provides exact access to the desired fields, eliminating convoluted variable clusters holding assorted disparate data types.
 
-![card data table](dt_card_data_table.png)
+![card data table](assets/images/dt_card_data_table.png)
 
 ### Score Calculation
 
@@ -302,7 +300,7 @@ Scores calculate directly against the real values queried from the static Data T
 
 The authoritative calculation must run comprehensively behind the scenes regardless of player intent; otherwise, validating an auditor's success rate would remain impossible safely verify.
 
-![play cards function](bp_calculate_score.png)
+![play cards function](assets/images/bp_calculate_score.png)
 
 ```mermaid
 graph TD
@@ -353,6 +351,20 @@ With this tool, a designer inputs statistical specifications explicitly on a for
 
 ## Testing
 
+To ensure the technical stability of _Greedy Piggies_, I conducted a series of iterative tests focusing on the core game loop, data integrity, and networked authoritative logic. The following table outlines the key tests performed during the development of both the game client and the Card Creator tool.
+
+| ID | Category | Test Description | Expected Result | Actual Outcome |
+|:---|:---|:---|:---|:---|
+| **T1** | **Game Loop** | Initialize game and execute `StartingDeal`. | 5 cards are correctly assigned to the `hands` array of each player. | **PASS** cards are dealt as expected, no duplicates or unintended behaviour. |
+| **T2** | **Game Loop** | Progression through a full set of 4 turns. | The `TotalTurnCount` increments correctly and triggers the Shop Phase on turn 4. | **PASS** the game progresses through the 4 turns as expected and the shop phase is triggered on turn 4. |
+| **T3** | **Auditing** | Audit an "honest" player declaration. | Auditor loses the declared value; active player keeps their score. | **PASS** the auditor loses the declared value and the active player keeps their score. |
+| **T4** | **Auditing** | Audit a "bluffing" player declaration. | Active player loses the full declared value; Auditor remains unaffected. | **PASS** the active player loses the full declared value and the auditor remains unaffected. |
+| **T5** | **Tooling** | Use Card Creator to generate a new card. | A valid Data Asset and a corresponding Blueprint class are created in the correct directory. | **PASS** the card creator successfully generates a valid Data Asset and a corresponding Blueprint class in the correct directory. |
+| **T6** | **Tooling** | Submit invalid data (e.g., negative value) to Card Creator. | Form validation prevents asset generation and displays a warning. | **FAIL** the card creator only checks that data is of the correct type, and does not validate for the sensible range. |
+| **T7** | **Networking** | Join a Steam session as a Client. | Client successfully connects to Server and replicates the current game state (Hand/Score). | **SEMI-PASS** the client joins sucessfully and replicates the current game state for the most part, but there are a few bugs. The joining client can see their hand and other players but scores do not display correctly. |
+| **T8** | **Networking** | Execute `ServerIsAuditing` RPC from Client. | Server receives the request and updates the authoritative audit state for all connected players. | **PASS** the server receives the request and updates the authoritative audit state for all connected players. |
+| **T9** | **AI Logic** | Observe AI audit decision-making. | AI selects an audit choice based on its random decision node and prints to the console. | **PASS** the AI makes a choice and prints it. Through this test I also found that a 50 50 chance of auditing or not auditing was not a good split, as the AI always lost lots of money very quickly. |
+
 ---
 
 ## Critical Reflection
@@ -377,8 +389,27 @@ Curve Animation (2024) _Liar's Bar_. [Video game]. PC: Curve Animation.
 
 Epic Games (2026) _Data-Driven Gameplay Elements_. Available at: https://dev.epicgames.com/documentation/en-us/unreal-engine/data-driven-gameplay-in-unreal-engine (Accessed: 19 April 2026).
 
+Epic Games (2026) _Unreal Engine 5_. [Software]. Available at: https://www.unrealengine.com/
+
+Git (2026) _Git_. [Software]. Available at: https://git-scm.com/
+
 Li, S., Zhao, Y. and Wang, X. (2024) 'Analysis of Bluffing by DQN and CFR in Leduc Hold'em Poker', _arXiv_, 2401.08522v1 [cs.GT]. Available at: https://arxiv.org/abs/2401.08522 (Accessed: 19 April 2026).
+
+Mermaid.js (2026) _Mermaid_. [Software]. Available at: https://mermaid.js.org/
+
+Outscal (2024) 'Effective Blueprint Communication and Maintenance in Unreal Engine'. _Outscal Blog_. Available at: https://outscal.com/blog/ (Accessed: 20 April 2026).
+
+Valve Corporation (2026) _Steam_. [Software/Service]. Available at: https://store.steampowered.com/about/
 
 ---
 
 ## Declared Assets
+
+- **Unreal Engine 5:** Primary game engine used for all gameplay systems, networking, and the Card Creator tool.
+- **Steamworks SDK:** Utilized for multiplayer session management and networking through the Steam Online Subsystem.
+- **Mermaid.js:** Used for the generation of all logic and system flowcharts within this documentation.
+- **Git / GitHub:** Primary version control and hosting services used for team collaboration and project management.
+
+> The following documentation was modified with the use of Antigravity (Claude 4.6, Google gemini 3 flash):
+> - `This Document` – proofreading, grammatical refinement, and structural and writing assistance.
+> - `Flowcharts` – Mermaid.js code generation based on provided technical logic and player loops.
