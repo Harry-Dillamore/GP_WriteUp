@@ -18,7 +18,7 @@
 
 ---
 
-## Abstract _(Approx. 5–10% | ~100–200 words)_
+## Abstract
 
 This commentary documents my contributions as a developer on _Greedy Piggies_, a multiplayer card game developed in Unreal Engine 5 as part of a group project, with the goal of a commercial release on Steam. The game is a bluffing and betting card game for 2–4 players, in which each player places cards face-down, declares a score value, and then faces the risk of being audited by their opponents. If an auditor successfully catches a bluff, the active player loses their declared value; if the challenge fails, the auditor pays the penalty instead. Players also periodically visit a shop to purchase special ability cards, adding a strategic layer to the core loop. My primary responsibilities spanned the full backend of the game: designing and implementing this core gameplay loop, developing the turn and audit systems, integrating Steam-based multiplayer networking, and building a bespoke **Card Creator** tool to support the design pipeline. The Card Creator, implemented as an Editor Utility Widget, was specifically intended to reduce production bottlenecks by allowing designers to create and register special ability cards independently, without requiring direct programmer involvement. Underpinning all systems is a data-driven architecture using Unreal's Data Tables and Data Assets, which ensured clean version control and prevented merge conflicts as the team scaled. Whilst the final game did not reach the level of polish originally intended, the core systems—including the gameplay loop, data architecture, and multiplayer integration—functioned as designed and represent the primary focus of this write-up.
 
@@ -26,11 +26,7 @@ This commentary documents my contributions as a developer on _Greedy Piggies_, a
 
 ---
 
-## Research _(Approx. 20-30% | ~400–600 words)_
-
-### What sources or references have you identified as relevant to this task?
-
-[Reflect on the type and relevance of sources explored. Justify your research direction in relation to the task brief and target outcomes.]
+## Research
 
 My research validates the **interdependence of technical stability and player psychology**. I focused on proving that data-driven architecture is the industry standard for reducing production friction, while grounding the "Audit" mechanic in game theory to ensure the loop remains engaging.
 
@@ -90,21 +86,7 @@ The Outscal technical blog addresses the specific friction points of large-team 
 
 ---
 
-## Implementation _(Approx. 30–40% | ~600–800 words)_
-
-### What was your development process and how did decisions evolve?
-
-[Describe your technical and creative approach: Planning, ideation, iteration (e.g. gameplay loop flowchart). Include feedback from the design team on the Card Creator and how it was integrated.]
-
-### What creative or technical methods did you try?
-
-[Discuss the Data Assets/Structs implementation for the Card Creator to prevent Git conflicts. Include evidence like blueprints/code snippets.]
-
-### Did you experience any technical challenges?
-
-[Discuss roadblocks with multiplayer networking, the "audit" state management, or resolving complex Git conflicts. Include before/after screenshots of code.]
-
----
+## Implementation
 
 ### Initial Prototyping
 
@@ -369,25 +351,17 @@ With this tool, a designer inputs statistical specifications explicitly on a for
 
 ---
 
-## Testing _(Approx. 10–15% | ~200–300 words)_
-
-### What testing methods did you use?
-
-[Detail the testing conducted for the tools (e.g., designers using Card Creator) and the game loop. Include a testing table, screenshots, bugs found, and how testing influenced the final result.]
+## Testing
 
 ---
 
-## Critical Reflection _(Approx. 10–15% | ~200–300 words)_
+## Critical Reflection
 
 ### What went well?
-
-[Reflect on successes: Which aspects of the Card Creator and the gameplay loop are you most proud of? Did it successfully fix the pipeline bottlenecks?]
 
 The Card Creator tool was a major success. It allowed designers to independently create cards without needing my direct involvement, removing a significant development bottleneck. It standardized data referencing, ensured consistent file organization, and effectively eliminated merge conflicts by cleanly separating out card assets. Additionally, I successfully engineered the core gameplay loop largely on my own, ensuring the backend functioned exactly as intended. Finally, despite the team's initial lack of experience with networked games, we successfully built and integrated a stable, working multiplayer system via Steam.
 
 ### What could be improved or done differently next time?
-
-[Reflect on what didn't work. What systems felt clunky? If you had another month, what would you rewrite or change?]
 
 A notable drawback was the reliance on a monolithic Dealer actor. Consolidating the core logic within a single, massive blueprint made it increasingly difficult to manage as team contributions grew. The blueprint's scale intimidated other developers from making changes and frequently resulted in merge conflicts. Furthermore, teammates struggled to comprehend the underlying game logic, preventing them from extending the systems and ultimately leaving several placeholder mechanics in the final product. In the future, I should prioritize onboarding team members and writing detailed technical documentation over creating the systems entirely independently.
 
@@ -408,5 +382,3 @@ Li, S., Zhao, Y. and Wang, X. (2024) 'Analysis of Bluffing by DQN and CFR in Led
 ---
 
 ## Declared Assets
-
-[List third-party assets, tutorial code snippets, UI packs, or AI-generated scripts/content.]
