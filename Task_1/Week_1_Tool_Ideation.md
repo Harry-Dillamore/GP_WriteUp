@@ -30,4 +30,6 @@ Implementing this plan yields massive value to the development pipeline:
 - **Designer Autonomy:** Designers can use the tool to instantly generate, configure, and balance cards via a visual interface without taking away an engineer's time.
 - **Minimizes Git Conflicts:** Safely separating individual card data assets across the team allows multiple designers to work simultaneously without encountering production-blocking git conflicts on monolithic central files.
 
-> This documentation was modified with the use of Antigravity (Claude 4.6, Google gemini 3 flash)
+---
+
+> This documentation was modified with the use of Antigravity (Claude 4.6, Google Gemini 3 Flash).

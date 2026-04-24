@@ -93,6 +93,8 @@ InputRarity:      "Rare"
 
 ## Bibliography
 
+I used the following sources to inform my decisions for this task:
+
 Jacobson, D., Brail, G. and Woods, D. (2011) *APIs: A Strategy Guide*. Sebastopol, CA: O'Reilly Media. Available at: [https://www.oreilly.com/library/view/apis-a-strategy/9781449321628/](https://www.oreilly.com/library/view/apis-a-strategy/9781449321628/) (Accessed: 24 April 2026).
 
 Masse, M. (2011) *REST API Design Rulebook*. Sebastopol, CA: O'Reilly Media. Available at: [https://www.oreilly.com/library/view/rest-api-design/9781449317904/](https://www.oreilly.com/library/view/rest-api-design/9781449317904/) (Accessed: 24 April 2026).

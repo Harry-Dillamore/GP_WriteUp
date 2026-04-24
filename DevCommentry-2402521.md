@@ -428,6 +428,6 @@ Valve Corporation (2026) _Steam_. [Software/Service]. Available at: https://stor
 - **Mermaid.js:** Used for the generation of all logic and system flowcharts within this documentation.
 - **Git / GitHub:** Primary version control and hosting services used for team collaboration and project management.
 
-> These documents were modified with the use of Antigravity (Claude 4.6, Google gemini 3 flash):
+> These documents were modified with the use of Antigravity (Claude 4.6, Google Gemini 3 Flash):
 > - `This Document` – proofreading, grammatical refinement, and structural and writing assistance.
 > - `Flowcharts` – Mermaid.js code generation based on provided technical logic and player loops.

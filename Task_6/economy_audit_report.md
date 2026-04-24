@@ -54,6 +54,6 @@
 ---
 
 > **AI Declaration:**
-> This economic audit was performed and documented with the assistance of Antigravity (Claude 4.6, Google Gemini 1.5 Flash). AI assistance was utilized for Python data visualization scripting (Matplotlib/Pandas), economic outlier analysis, and technical report formatting.
+> This economic audit was performed and documented with the assistance of Antigravity (Claude 4.6, Google Gemini 3 Flash). AI assistance was utilized for Python data visualization scripting (Matplotlib/Pandas), economic outlier analysis, and technical report formatting.
 
 ---
